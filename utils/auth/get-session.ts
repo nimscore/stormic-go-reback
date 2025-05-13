@@ -3,15 +3,15 @@ import { cookies } from 'next/headers'
 
 export async function getSession(): Promise<User | null> {
 	const cookieStore = await cookies()
-	const token = cookieStore.get('payload-token')?.value
-
+	const token = cookieStore.get('auth-token')?.value
+	
 	if (!token) {
 		return null
 	}
-
+	
 	try {
 		const res = await fetch(
-			`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/me`,
+			`${process.env.NEXT_PUBLIC_SERVER_URL}/v1/users/me`,
 			{
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -19,12 +19,14 @@ export async function getSession(): Promise<User | null> {
 				cache: 'no-store',
 			}
 		)
-
+		
 		if (!res.ok) {
 			return null
 		}
-
-		const user = await res.json()
+		
+		const data = await res.json()
+		const user = data.user as User
+		
 		return user || null
 	} catch (error) {
 		console.error('Ошибка получения сессии:', error)
