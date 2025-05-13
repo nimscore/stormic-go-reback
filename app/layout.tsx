@@ -1,6 +1,6 @@
-import { Header } from '@/components'
+import { Header } from '@/components/header/header'
 import { User } from '@/schema/types'
-import { getSession } from '@/utils/auth'
+import { getSession } from '@/utils/auth/get-session'
 import { Nunito } from 'next/font/google'
 import React, { Suspense } from 'react'
 import './globals.css'
@@ -18,6 +18,7 @@ export default async function HomeLayout({
 }) {
 	const session = (await getSession()) as { user: User } | null
 	const currentUser = session && session.user
+	console.log('currentUser:', currentUser)
 
 	// Базовая разметка, которая будет использоваться в обоих случаях
 	const baseLayout = (content: React.ReactNode) => (
@@ -39,7 +40,9 @@ export default async function HomeLayout({
 				<Suspense>
 					<Header />
 				</Suspense>
-				<div className='min-h-[calc(100vh-8rem)]'>{children}</div>
+				<div className='min-h-[calc(100vh-8rem)]'>
+					<p>Ты не авторизован</p>
+					{children}</div>
 			</>
 		)
 	}
@@ -49,7 +52,9 @@ export default async function HomeLayout({
 			<Suspense>
 				<Header currentUser={currentUser} />
 			</Suspense>
-			<div className='min-h-[calc(100vh-8rem)]'>{children}</div>
+			<div className='min-h-[calc(100vh-8rem)]'>
+				<p>Ты авторизован</p>
+				{children}</div>
 		</>
 	)
 }

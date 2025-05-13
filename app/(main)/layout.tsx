@@ -1,4 +1,4 @@
-import { Container } from '@/components'
+import { Container } from '@/components/misc/container'
 import type { Metadata } from 'next'
 import React from 'react'
 

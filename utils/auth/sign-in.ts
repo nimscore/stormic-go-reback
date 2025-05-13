@@ -1,35 +1,28 @@
-import { User } from '@/schema/types'
-import { cookies } from 'next/headers'
-
-export async function getSession(): Promise<User | null> {
-	const cookieStore = await cookies()
-	const token = cookieStore.get('auth-token')?.value
-	
-	if (!token) {
-		return null
-	}
-	
+export async function signIn(data: { email: string; password: string }) {
 	try {
 		const res = await fetch(
-			`${process.env.NEXT_PUBLIC_SERVER_URL}/v1/users/me`,
+			`${process.env.NEXT_PUBLIC_SERVER_URL}/v1/users/login`,
 			{
+				method: 'POST',
 				headers: {
-					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json',
 				},
+				body: JSON.stringify(data),
 				cache: 'no-store',
+				credentials: 'include',
 			}
 		)
 		
 		if (!res.ok) {
-			return null
+			const errorData = await res.json()
+			throw new Error(errorData.error || 'Login failed')
 		}
 		
-		const data = await res.json()
-		const user = data.user as User
+		const result = await res.json();
+		console.log('Server response body:', result);
 		
-		return user || null
+		return { success: true }
 	} catch (error) {
-		console.error('Ошибка получения сессии:', error)
-		return null
+		throw error
 	}
 }

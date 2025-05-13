@@ -1,6 +1,7 @@
 'use client'
 
-import { AutoResizeTextarea, ClearButton } from '@/components'
+import { ClearButton } from '@/components/buttons/clear-button'
+import { AutoResizeTextarea } from '@/components/form/auto-resize-textarea'
 import { cn } from '@/lib/utils'
 import React from 'react'
 import { useFormContext } from 'react-hook-form'

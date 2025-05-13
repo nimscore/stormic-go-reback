@@ -1,6 +1,8 @@
 'use client'
 
-import { ClearButton, ErrorText, RequiredSymbol } from '@/components'
+import { ClearButton } from '@/components/buttons/clear-button'
+import { ErrorText } from '@/components/misc/error-text'
+import { RequiredSymbol } from '@/components/misc/required-symbol'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import React from 'react'

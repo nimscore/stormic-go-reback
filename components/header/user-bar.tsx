@@ -1,8 +1,9 @@
 'use client'
 
+import { ProfileButton } from '@/components/community-profile/profile-button'
+import { AuthModal } from '@/components/modals/auth-modal/auth-modal'
 import { Button } from '@/components/ui/button'
 // import { LocaleToggle } from '@/shared/components/ui/locale-toggle'
-import { AuthModal, ProfileButton } from '@/components'
 import { cn } from '@/lib/utils'
 import { User } from '@/schema/types'
 import { Search } from 'lucide-react'

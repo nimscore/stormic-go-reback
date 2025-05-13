@@ -1,12 +1,13 @@
 'use client'
 
-import { FormInput } from '@/components'
+import { FormInput } from '@/components/form'
+import { Title } from '@/components/misc/title'
 import { Button } from '@/components/ui/button'
+import { registerUser } from '@/utils/auth/register'
 import { zodResolver } from '@hookform/resolvers/zod'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 // import { useIntl } from 'react-intl'
-import { Title } from '@/components'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { formRegisterSchema, TFormRegisterValues } from './schemas'
@@ -35,30 +36,30 @@ export const RegisterForm: React.FC<Props> = ({
 			confirmPassword: '',
 		},
 	})
-
-	const onSubmit = async (data: TFormRegisterValues) => {
-		try {
-			await registerUser({
-				email: data.email,
-				fullName: data.fullName,
-				password: data.password,
-				confirmPassword: data.confirmPassword,
-			})
-
-			// toast.success(String(formatMessage({ id: 'registerForm.toastSuccess' })), {
-			toast.success('Регистрация успешна', {
-				icon: '✅',
-			})
-
-			onClose?.()
-			router.refresh()
-		} catch (error) {
-			// return toast.error(String(formatMessage({ id: 'registerForm.toastError' })), {
-			return toast.error('Неверная почта или пароль', {
-				icon: '❌',
-			})
-		}
-	}
+	
+	const onSubmit = useCallback(
+		async (data: TFormRegisterValues) => {
+			try {
+				const result = await registerUser({
+					email: data.email,
+					name: data.fullName,
+					password: data.password,
+					confirmPassword: data.confirmPassword,
+				})
+				toast.success(result.message || 'Регистрация успешна', {
+					icon: '✅',
+				})
+				onClose?.()
+				router.refresh()
+			} catch (error: any) {
+				console.error('Error [REGISTER]', error)
+				toast.error(error.message || 'Ошибка при регистрации', {
+					icon: '❌',
+				})
+			}
+		},
+		[router, onClose]
+	)
 
 	return (
 		<FormProvider {...form}>

@@ -1,6 +1,6 @@
 'use client'
 
-import { Container } from '@/components'
+import { Container } from '@/components/misc/container'
 import { cn } from '@/lib/utils'
 import { User } from '@/schema/types'
 import Link from 'next/link'
@@ -30,21 +30,13 @@ export const Header: React.FC<Props> = ({ currentUser, className }) => {
 	const communityId = getCommunityIdFromPath(pathname)
 
 	React.useEffect(() => {
-		let toastMessage = ''
-
 		if (searchParams?.has('verified')) {
-			toastMessage = 'Почта успешно подтверждена!'
+			toast.success('Почта успешно подтверждена!', {
+				duration: 3000,
+			})
+			router.replace('/')
 		}
-
-		if (toastMessage) {
-			setTimeout(() => {
-				router.replace('/')
-				toast.success(toastMessage, {
-					duration: 3000,
-				})
-			}, 1000)
-		}
-	}, [])
+	}, [searchParams, router])
 
 	return (
 		<header
