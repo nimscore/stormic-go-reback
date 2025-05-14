@@ -6,7 +6,6 @@ import { User } from '@/schema/types'
 import Link from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
-import { toast } from 'sonner'
 import { HeaderNavigation } from './navigation'
 import { HeaderUserBar } from './user-bar'
 
@@ -28,15 +27,6 @@ export const Header: React.FC<Props> = ({ currentUser, className }) => {
 	}
 
 	const communityId = getCommunityIdFromPath(pathname)
-
-	React.useEffect(() => {
-		if (searchParams?.has('verified')) {
-			toast.success('Почта успешно подтверждена!', {
-				duration: 3000,
-			})
-			router.replace('/')
-		}
-	}, [searchParams, router])
 
 	return (
 		<header

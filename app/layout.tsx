@@ -1,4 +1,5 @@
 import { Header } from '@/components/header/header'
+import { Providers } from '@/providers'
 import { User } from '@/schema/types'
 import { getSession } from '@/utils/auth/get-session'
 import { Nunito } from 'next/font/google'
@@ -18,7 +19,6 @@ export default async function HomeLayout({
 }) {
 	const session = (await getSession()) as { user: User } | null
 	const currentUser = session && session.user
-	console.log('currentUser:', currentUser)
 
 	// Базовая разметка, которая будет использоваться в обоих случаях
 	const baseLayout = (content: React.ReactNode) => (
@@ -28,7 +28,9 @@ export default async function HomeLayout({
         <link href='/favicon.svg' rel='icon' type='image/svg+xml'/> */}
 			</head>
 			<body className={nunito.className}>
-				<main className='min-h-screen'>{content}</main>
+				<Providers session={session}>
+					<main className='min-h-screen'>{content}</main>
+				</Providers>
 			</body>
 		</html>
 	)
@@ -42,7 +44,8 @@ export default async function HomeLayout({
 				</Suspense>
 				<div className='min-h-[calc(100vh-8rem)]'>
 					<p>Ты не авторизован</p>
-					{children}</div>
+					{children}
+				</div>
 			</>
 		)
 	}
@@ -54,7 +57,8 @@ export default async function HomeLayout({
 			</Suspense>
 			<div className='min-h-[calc(100vh-8rem)]'>
 				<p>Ты авторизован</p>
-				{children}</div>
+				{children}
+			</div>
 		</>
 	)
 }
