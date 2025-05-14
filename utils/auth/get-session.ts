@@ -1,9 +1,8 @@
-// import { cookies } from 'next/headers'
-
-import Cookies from 'js-cookie'
+import { cookies } from 'next/headers'
 
 export async function getSession() {
-	const token = Cookies.get('auth_token')
+	const cookieStore = await cookies()
+	const token = cookieStore.get('auth_token')?.value
 	if (!token) {
 		console.log('⚠️ [getSession] auth_token cookie not found')
 		return null
@@ -32,30 +31,3 @@ export async function getSession() {
 		return null
 	}
 }
-
-// export async function getSession() {
-// 	const cookieStore = await cookies()
-// 	const token = cookieStore.get('auth-token')?.value
-
-// 	if (!token) return null
-
-// 	try {
-// 		const res = await fetch(
-// 			`${process.env.NEXT_PUBLIC_SERVER_URL}/v1/users/me`,
-// 			{
-// 				headers: {
-// 					Authorization: `Bearer ${token}`,
-// 				},
-// 				cache: 'no-store',
-// 			}
-// 		)
-
-// 		if (!res.ok) return null
-// 		const data = await res.json()
-
-// 		return { user: data, token }
-// 	} catch (e) {
-// 		console.error('Ошибка при получении сессии', e)
-// 		return null
-// 	}
-// }

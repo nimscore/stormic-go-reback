@@ -1,5 +1,6 @@
 'use client'
 
+import { ModeToggle } from '@/components/misc/mode-toggle'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
 	DropdownMenu,
@@ -8,9 +9,11 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { User } from '@/schema/types'
+import { signOut } from '@/utils/auth/sign-out'
 import { CircleUser, LogIn } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
+import { toast } from 'sonner'
 
 interface Props {
 	currentUser?: User
@@ -25,6 +28,22 @@ export const ProfileButton: React.FC<Props> = ({
 }) => {
 	const router = useRouter()
 	const [dropdownKey, setDropdownKey] = useState(Date.now()) // Уникальный ключ для DropdownMenu
+	
+	const handleSignOut = useCallback(async () => {
+		try {
+			const result = await signOut()
+			console.log('✅ [signOut] Response:', result)
+			toast.success(result.message || 'Вы успешно вышли из аккаунта!', {
+				duration: 3000,
+			})
+			router.refresh()
+		} catch (error: any) {
+			console.error('❌ [signOut] Error:', error)
+			toast.error('Ошибка при выходе из аккаунта!', {
+				duration: 3000,
+			})
+		}
+	}, [router])
 
 	const handleSignInClick = () => {
 		if (onClickSignIn) {
@@ -46,6 +65,7 @@ export const ProfileButton: React.FC<Props> = ({
 					<DropdownMenuContent align='end' className='bg-secondary'>
 						<DropdownMenuItem className='flex justify-between gap-2'>
 							<span className='text-foreground text-base'>Оформление</span>
+							<ModeToggle />
 						</DropdownMenuItem>
 						<DropdownMenuItem
 							className='flex cursor-pointer gap-2'
@@ -88,7 +108,14 @@ export const ProfileButton: React.FC<Props> = ({
 						>
 							Настройки
 						</DropdownMenuItem>
-						<DropdownMenuItem className='cursor-pointer text-foreground text-base'>
+						<DropdownMenuItem className='flex justify-between gap-2 text-foreground text-base'>
+							<span>Оформление</span>
+							<ModeToggle />
+						</DropdownMenuItem>
+						<DropdownMenuItem
+							className='cursor-pointer text-foreground text-base'
+							onClick={handleSignOut}
+						>
 							Выйти
 						</DropdownMenuItem>
 					</DropdownMenuContent>
