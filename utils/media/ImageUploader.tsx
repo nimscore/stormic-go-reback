@@ -12,20 +12,22 @@ interface Media {
 interface ImageUploaderProps {
 	setCommentImage: (media: Media | undefined) => void
 	setIsUploading: (isUploading: boolean) => void
+	setS3Path: string
 }
 
 export const ImageUploader: React.FC<ImageUploaderProps> = ({
 	setCommentImage,
 	setIsUploading,
+	setS3Path
 }) => {
 	const inputRef = useRef<HTMLInputElement>(null)
 
 	const handleUpload = async (file: File) => {
 		setIsUploading(true)
 		const formData = new FormData()
-		formData.append('file', file)
+		formData.append("file", file)
 		try {
-			const result = await createMedia(formData)
+			const result = await createMedia(formData, `${setS3Path}`)
 			setCommentImage({ url: result.url })
 			toast.success('Изображение успешно загружено', { icon: '✅' })
 		} catch (error) {

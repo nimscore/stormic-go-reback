@@ -2,7 +2,11 @@
 
 import Cookies from 'js-cookie'
 
-export async function createMedia(data: FormData): Promise<{ url: string }> {
+export async function createMedia(
+	data: FormData,
+	dir = "media"
+): Promise<{ url: string }> {
+	data.append("dir", dir)
 	try {
 		const token = Cookies.get('auth_token')
 		if (!token) {

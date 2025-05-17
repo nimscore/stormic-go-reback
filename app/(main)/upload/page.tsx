@@ -19,7 +19,9 @@ export default function UploadPage() {
 				<ImageUploader
 					setCommentImage={setCommentImage}
 					setIsUploading={setIsUploading}
+					setS3Path='community/23/post/heroImage'
 				/>
+				{/* <img src='https://s3.twcstorage.ru/2e7a4ea7-teststormic/community/23/post/heroImage/photo_2025-04-14_22-41-23.jpg' /> */}
 				{isUploading && <p className='mt-4'>Загрузка...</p>}
 				{commentImage && (
 					<div className='mt-4'>
