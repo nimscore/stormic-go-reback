@@ -28,7 +28,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
 		formData.append("file", file)
 		try {
 			const result = await createMedia(formData, `${setS3Path}`)
-			setCommentImage({ url: result.url })
+			setCommentImage({ url: `${process.env.NEXT_PUBLIC_BASE_URL}/${result.url}` })
 			toast.success('Изображение успешно загружено', { icon: '✅' })
 		} catch (error) {
 			toast.error('Ошибка при загрузке изображения', { icon: '❌' })
