@@ -1,8 +1,8 @@
 'use client'
 
 import {
-	RegisterInitForm
-} from '@/components/modals/auth-modal/forms/register-init-form'
+	RegisterSetupForm
+} from '@/components/modals/auth-modal/forms/register-setup-form'
 import { cn } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 import React from 'react'
@@ -13,7 +13,7 @@ interface Props {
 	className?: string
 }
 
-export const InitForm: React.FC<Props> = ({
+export const SetupForm: React.FC<Props> = ({
 	                                           className
                                            }) => {
 	const router = useRouter()
@@ -28,7 +28,7 @@ export const InitForm: React.FC<Props> = ({
 			<div className='hidden lg:block lg:w-1/4 lg:h-[calc(100vh-6rem)] lg:overflow-auto lg:no-scrollbar'>
 				
 				{type === 'register' && (
-					<RegisterInitForm setType={setType} />
+					<RegisterSetupForm setType={setType} />
 				)}
 				{type === 'settings' && (
 					<p>

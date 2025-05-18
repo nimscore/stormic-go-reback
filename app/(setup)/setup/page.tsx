@@ -1,6 +1,6 @@
-import { InitForm } from '@/components/misc/simple-pages/init-form'
+import { SetupForm } from '@/components/misc/simple-pages/setup-form'
 import React from 'react'
 
-export default async function InitPage() {
-	return <InitForm />
+export default async function SetupPage() {
+	return <SetupForm />
 }

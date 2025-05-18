@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 	title: 'Stormic: Начальная настройка'
 }
 
-export default async function InitLayout({
+export default async function SetupLayout({
 	                                                children
                                                 }: Readonly<{
 	children: React.ReactNode

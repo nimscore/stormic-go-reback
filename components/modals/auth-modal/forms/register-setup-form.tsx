@@ -18,7 +18,7 @@ interface Props {
 	>
 }
 
-export const RegisterInitForm: React.FC<Props> = ({
+export const RegisterSetupForm: React.FC<Props> = ({
 	setType,
 }) => {
 	// const { formatMessage } = useIntl()
