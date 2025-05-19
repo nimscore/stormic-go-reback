@@ -1,0 +1,12 @@
+query GetUsers {
+	users {
+		id
+		name
+		email
+		hostRoles {
+			name
+			color
+		}
+		createdAt
+	}
+}
