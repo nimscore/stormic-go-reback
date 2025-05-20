@@ -1,6 +1,9 @@
 mutation UpdateHost($input: UpdateHostInput!) {
 	host(input: $input) {
 		title
+		slogan
+		contacts
+		description
 		firstSettings
 	}
 }

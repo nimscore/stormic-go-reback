@@ -300,6 +300,7 @@ export type Community = Node & {
   posts?: Maybe<Array<Post>>;
   roles?: Maybe<Array<Role>>;
   rules?: Maybe<Array<CommunityRule>>;
+  slug: Scalars['String']['output'];
   tableInfo?: Maybe<Scalars['JSON']['output']>;
   title: Scalars['String']['output'];
   updatedAt: Scalars['Time']['output'];
@@ -764,6 +765,20 @@ export type CommunityWhereInput = {
   ownerIDIn?: InputMaybe<Array<Scalars['ID']['input']>>;
   ownerIDNEQ?: InputMaybe<Scalars['ID']['input']>;
   ownerIDNotIn?: InputMaybe<Array<Scalars['ID']['input']>>;
+  /** slug field predicates */
+  slug?: InputMaybe<Scalars['String']['input']>;
+  slugContains?: InputMaybe<Scalars['String']['input']>;
+  slugContainsFold?: InputMaybe<Scalars['String']['input']>;
+  slugEqualFold?: InputMaybe<Scalars['String']['input']>;
+  slugGT?: InputMaybe<Scalars['String']['input']>;
+  slugGTE?: InputMaybe<Scalars['String']['input']>;
+  slugHasPrefix?: InputMaybe<Scalars['String']['input']>;
+  slugHasSuffix?: InputMaybe<Scalars['String']['input']>;
+  slugIn?: InputMaybe<Array<Scalars['String']['input']>>;
+  slugLT?: InputMaybe<Scalars['String']['input']>;
+  slugLTE?: InputMaybe<Scalars['String']['input']>;
+  slugNEQ?: InputMaybe<Scalars['String']['input']>;
+  slugNotIn?: InputMaybe<Array<Scalars['String']['input']>>;
   /** title field predicates */
   title?: InputMaybe<Scalars['String']['input']>;
   titleContains?: InputMaybe<Scalars['String']['input']>;
@@ -1854,6 +1869,7 @@ export type Post = Node & {
   meta?: Maybe<Scalars['JSON']['output']>;
   publishedAt?: Maybe<Scalars['Time']['output']>;
   relatedPost?: Maybe<Array<Post>>;
+  slug: Scalars['String']['output'];
   title: Scalars['String']['output'];
   updatedAt: Scalars['Time']['output'];
   views: Scalars['Int']['output'];
@@ -2001,6 +2017,20 @@ export type PostWhereInput = {
   publishedAtNEQ?: InputMaybe<Scalars['Time']['input']>;
   publishedAtNotIn?: InputMaybe<Array<Scalars['Time']['input']>>;
   publishedAtNotNil?: InputMaybe<Scalars['Boolean']['input']>;
+  /** slug field predicates */
+  slug?: InputMaybe<Scalars['String']['input']>;
+  slugContains?: InputMaybe<Scalars['String']['input']>;
+  slugContainsFold?: InputMaybe<Scalars['String']['input']>;
+  slugEqualFold?: InputMaybe<Scalars['String']['input']>;
+  slugGT?: InputMaybe<Scalars['String']['input']>;
+  slugGTE?: InputMaybe<Scalars['String']['input']>;
+  slugHasPrefix?: InputMaybe<Scalars['String']['input']>;
+  slugHasSuffix?: InputMaybe<Scalars['String']['input']>;
+  slugIn?: InputMaybe<Array<Scalars['String']['input']>>;
+  slugLT?: InputMaybe<Scalars['String']['input']>;
+  slugLTE?: InputMaybe<Scalars['String']['input']>;
+  slugNEQ?: InputMaybe<Scalars['String']['input']>;
+  slugNotIn?: InputMaybe<Array<Scalars['String']['input']>>;
   /** title field predicates */
   title?: InputMaybe<Scalars['String']['input']>;
   titleContains?: InputMaybe<Scalars['String']['input']>;
@@ -2038,8 +2068,13 @@ export type PostWhereInput = {
 export type Query = {
   __typename?: 'Query';
   communities: Array<Community>;
+  community?: Maybe<Community>;
   host?: Maybe<Host>;
   hostRoles: Array<HostRole>;
+  hostSidebarNavigation?: Maybe<HostSidebarNavigation>;
+  hostSidebarNavigationItems: Array<HostSidebarNavigationItem>;
+  hostSocialNavigation?: Maybe<HostSocialNavigation>;
+  media?: Maybe<Media>;
   /** Fetches an object given its ID. */
   node?: Maybe<Node>;
   /** Lookup nodes by a list of IDs. */
@@ -2051,6 +2086,16 @@ export type Query = {
 
 export type QueryCommunitiesArgs = {
   onlyNotBanned?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type QueryCommunityArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryMediaArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -2234,6 +2279,7 @@ export type User = Node & {
   posts?: Maybe<Array<Post>>;
   postsLikes?: Maybe<Array<PostLike>>;
   salt: Scalars['String']['output'];
+  slug: Scalars['String']['output'];
   tableInfo?: Maybe<Scalars['JSON']['output']>;
   updatedAt: Scalars['Time']['output'];
 };
@@ -2468,6 +2514,20 @@ export type UserWhereInput = {
   saltLTE?: InputMaybe<Scalars['String']['input']>;
   saltNEQ?: InputMaybe<Scalars['String']['input']>;
   saltNotIn?: InputMaybe<Array<Scalars['String']['input']>>;
+  /** slug field predicates */
+  slug?: InputMaybe<Scalars['String']['input']>;
+  slugContains?: InputMaybe<Scalars['String']['input']>;
+  slugContainsFold?: InputMaybe<Scalars['String']['input']>;
+  slugEqualFold?: InputMaybe<Scalars['String']['input']>;
+  slugGT?: InputMaybe<Scalars['String']['input']>;
+  slugGTE?: InputMaybe<Scalars['String']['input']>;
+  slugHasPrefix?: InputMaybe<Scalars['String']['input']>;
+  slugHasSuffix?: InputMaybe<Scalars['String']['input']>;
+  slugIn?: InputMaybe<Array<Scalars['String']['input']>>;
+  slugLT?: InputMaybe<Scalars['String']['input']>;
+  slugLTE?: InputMaybe<Scalars['String']['input']>;
+  slugNEQ?: InputMaybe<Scalars['String']['input']>;
+  slugNotIn?: InputMaybe<Array<Scalars['String']['input']>>;
   /** updated_at field predicates */
   updatedAt?: InputMaybe<Scalars['Time']['input']>;
   updatedAtGT?: InputMaybe<Scalars['Time']['input']>;
@@ -2479,17 +2539,20 @@ export type UserWhereInput = {
   updatedAtNotIn?: InputMaybe<Array<Scalars['Time']['input']>>;
 };
 
-export type GetCommunitiesQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type GetCommunitiesQueryVariables = Types.Exact<{
+  onlyNotBanned: Types.Scalars['Boolean']['input'];
+}>;
 
 
-export type GetCommunitiesQuery = { __typename?: 'Query', communities: Array<{ __typename?: 'Community', id: string, title: string, communityHasBanned: boolean }> };
+export type GetCommunitiesQuery = { __typename?: 'Query', communities: Array<{ __typename?: 'Community', id: string, title: string, slug: string, communityHasBanned: boolean }> };
 
 
 export const GetCommunitiesDocument = gql`
-    query GetCommunities {
-  communities {
+    query GetCommunities($onlyNotBanned: Boolean!) {
+  communities(onlyNotBanned: $onlyNotBanned) {
     id
     title
+    slug
     communityHasBanned
   }
 }
@@ -2507,10 +2570,11 @@ export const GetCommunitiesDocument = gql`
  * @example
  * const { data, loading, error } = useGetCommunitiesQuery({
  *   variables: {
+ *      onlyNotBanned: // value for 'onlyNotBanned'
  *   },
  * });
  */
-export function useGetCommunitiesQuery(baseOptions?: Apollo.QueryHookOptions<GetCommunitiesQuery, GetCommunitiesQueryVariables>) {
+export function useGetCommunitiesQuery(baseOptions: Apollo.QueryHookOptions<GetCommunitiesQuery, GetCommunitiesQueryVariables> & ({ variables: GetCommunitiesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetCommunitiesQuery, GetCommunitiesQueryVariables>(GetCommunitiesDocument, options);
       }

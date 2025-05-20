@@ -1,0 +1,9 @@
+query GetHost {
+	host {
+		title
+		slogan
+		contacts
+		description
+		firstSettings
+	}
+}

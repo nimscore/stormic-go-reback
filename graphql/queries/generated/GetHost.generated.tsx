@@ -1,3 +1,7 @@
+import * as Types from '../../schema/graphql';
+
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -5,6 +9,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -2534,50 +2539,52 @@ export type UserWhereInput = {
   updatedAtNotIn?: InputMaybe<Array<Scalars['Time']['input']>>;
 };
 
-export type UpdateHostMutationVariables = Exact<{
-  input: UpdateHostInput;
-}>;
-
-
-export type UpdateHostMutation = { __typename?: 'Mutation', host: { __typename?: 'Host', title?: string | null, slogan?: string | null, contacts?: string | null, description?: string | null, firstSettings: boolean } };
-
-export type GetCommunitiesQueryVariables = Exact<{
-  onlyNotBanned: Scalars['Boolean']['input'];
-}>;
-
-
-export type GetCommunitiesQuery = { __typename?: 'Query', communities: Array<{ __typename?: 'Community', id: string, title: string, slug: string, communityHasBanned: boolean }> };
-
-export type GetHostQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetHostQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type GetHostQuery = { __typename?: 'Query', host?: { __typename?: 'Host', title?: string | null, slogan?: string | null, contacts?: string | null, description?: string | null, firstSettings: boolean } | null };
 
-export type GetHostSidebarNavigationQueryVariables = Exact<{ [key: string]: never; }>;
 
+export const GetHostDocument = gql`
+    query GetHost {
+  host {
+    title
+    slogan
+    contacts
+    description
+    firstSettings
+  }
+}
+    `;
 
-export type GetHostSidebarNavigationQuery = { __typename?: 'Query', hostSidebarNavigation?: { __typename?: 'HostSidebarNavigation', items?: Array<{ __typename?: 'HostSidebarNavigationItem', id: string, sidebarNavigationID: string, postID: string, createdAt: any }> | null } | null };
-
-export type GetHostSocialNavigationQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetHostSocialNavigationQuery = { __typename?: 'Query', hostSocialNavigation?: { __typename?: 'HostSocialNavigation', github?: string | null, site?: string | null, telegram?: string | null, instagram?: string | null, twitter?: string | null, mastodon?: string | null } | null };
-
-export type GetMediaByIdQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type GetMediaByIdQuery = { __typename?: 'Query', media?: { __typename?: 'Media', id: string, url?: string | null, createdAt: any } | null };
-
-export type GetUserByIdQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type GetUserByIdQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, name: string, email: string, createdAt: any, hostRoles?: Array<{ __typename?: 'HostRole', name: string, color?: string | null }> | null } | null };
-
-export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, name: string, email: string, createdAt: any, hostRoles?: Array<{ __typename?: 'HostRole', name: string, color?: string | null }> | null }> };
+/**
+ * __useGetHostQuery__
+ *
+ * To run a query within a React component, call `useGetHostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetHostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetHostQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetHostQuery(baseOptions?: Apollo.QueryHookOptions<GetHostQuery, GetHostQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetHostQuery, GetHostQueryVariables>(GetHostDocument, options);
+      }
+export function useGetHostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetHostQuery, GetHostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetHostQuery, GetHostQueryVariables>(GetHostDocument, options);
+        }
+export function useGetHostSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetHostQuery, GetHostQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetHostQuery, GetHostQueryVariables>(GetHostDocument, options);
+        }
+export type GetHostQueryHookResult = ReturnType<typeof useGetHostQuery>;
+export type GetHostLazyQueryHookResult = ReturnType<typeof useGetHostLazyQuery>;
+export type GetHostSuspenseQueryHookResult = ReturnType<typeof useGetHostSuspenseQuery>;
+export type GetHostQueryResult = Apollo.QueryResult<GetHostQuery, GetHostQueryVariables>;

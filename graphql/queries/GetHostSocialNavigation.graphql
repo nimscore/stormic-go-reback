@@ -1,0 +1,10 @@
+query GetHostSocialNavigation {
+	hostSocialNavigation {
+		github
+		site
+		telegram
+		instagram
+		twitter
+		mastodon
+	}
+}

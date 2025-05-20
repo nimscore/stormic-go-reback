@@ -1,7 +1,8 @@
-query GetCommunities {
-	communities {
+query GetCommunities($onlyNotBanned: Boolean!) {
+	communities(onlyNotBanned: $onlyNotBanned) {
 		id
 		title
+		slug
 		communityHasBanned
 	}
 }

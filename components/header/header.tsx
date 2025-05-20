@@ -1,6 +1,12 @@
 'use client'
 
 import { Container } from '@/components/misc/container'
+import {
+	GetCommunitiesQuery,
+	GetHostQuery,
+	GetHostSidebarNavigationQuery,
+	GetHostSocialNavigationQuery,
+} from '@/graphql/schema/graphql'
 import { cn } from '@/lib/utils'
 import { User } from '@/schema/types'
 import Link from 'next/link'
@@ -10,11 +16,22 @@ import { HeaderNavigation } from './navigation'
 import { HeaderUserBar } from './user-bar'
 
 interface Props {
+	hostSettings: GetHostQuery
+	communities: GetCommunitiesQuery
+	hostSidebarNavigation: GetHostSidebarNavigationQuery
+	socialNavigation: GetHostSocialNavigationQuery
 	currentUser?: User
 	className?: string
 }
 
-export const Header: React.FC<Props> = ({ currentUser, className }) => {
+export const Header: React.FC<Props> = ({
+	hostSettings,
+	communities,
+	hostSidebarNavigation,
+	socialNavigation,
+	currentUser,
+	className,
+}) => {
 	const router = useRouter()
 	const searchParams = useSearchParams()
 	const pathname = usePathname()

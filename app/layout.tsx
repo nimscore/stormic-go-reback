@@ -1,20 +1,25 @@
 import { Header } from '@/components/header/header'
 import {
-	UpdateHostDocument,
-	UpdateHostMutationVariables,
-} from '@/graphql/mutations/generated/UpdateHost.generated'
+	GetCommunitiesDocument,
+	GetCommunitiesQueryVariables,
+} from '@/graphql/queries/generated/GetCommunities.generated'
 import {
-	GetUserDocument,
-	GetUserQueryVariables,
-} from '@/graphql/queries/generated/GetUser.generated'
+	GetHostDocument,
+	GetHostQueryVariables,
+} from '@/graphql/queries/generated/GetHost.generated'
 import {
-	GetUsersDocument,
-	GetUsersQueryVariables,
-} from '@/graphql/queries/generated/GetUsers.generated'
+	GetHostSidebarNavigationDocument,
+	GetHostSidebarNavigationQueryVariables,
+} from '@/graphql/queries/generated/GetHostSidebarNavigation.generated'
 import {
-	GetUserQuery,
-	GetUsersQuery,
-	UpdateHostMutation,
+	GetHostSocialNavigationDocument,
+	GetHostSocialNavigationQueryVariables,
+} from '@/graphql/queries/generated/GetHostSocialNavigation.generated'
+import {
+	GetCommunitiesQuery,
+	GetHostQuery,
+	GetHostSidebarNavigationQuery,
+	GetHostSocialNavigationQuery,
 } from '@/graphql/schema/graphql'
 import { apolloClient } from '@/lib/apollo-client'
 import { Providers } from '@/providers'
@@ -49,8 +54,47 @@ export default async function RootLayout({
 	const currentUser = session && session.user
 	const apollo = apolloClient()
 
+	const { data: sidebarNavigationResult, errors: sidebarNavigationErrors } =
+		await apollo.query<
+			GetHostSidebarNavigationQuery,
+			GetHostSidebarNavigationQueryVariables
+		>({
+			query: GetHostSidebarNavigationDocument,
+			fetchPolicy: 'network-only',
+			errorPolicy: 'all',
+		})
+
+	const { data: communitiesResult, errors: communitiesErrors } =
+		await apollo.query<GetCommunitiesQuery, GetCommunitiesQueryVariables>({
+			query: GetCommunitiesDocument,
+			fetchPolicy: 'network-only',
+			errorPolicy: 'all',
+			variables: { onlyNotBanned: true },
+		})
+
+	const { data: hostResult, errors: hostResultErrors } = await apollo.query<
+		GetHostQuery,
+		GetHostQueryVariables
+	>({
+		query: GetHostDocument,
+		fetchPolicy: 'network-only',
+		errorPolicy: 'all',
+	})
+
+	const { data: socialNavigationResult, errors: socialNavigationErrors } =
+		await apollo.query<
+			GetHostSocialNavigationQuery,
+			GetHostSocialNavigationQueryVariables
+		>({
+			query: GetHostSocialNavigationDocument,
+			fetchPolicy: 'network-only',
+			errorPolicy: 'all',
+		})
+
+	// это киентский запрос
 	// const { data, loading, error } = useQuery(GET_COMMUNITIES)
 
+	// это с трай-кэтчем
 	// const [updateHost, { data, loading, error }] = useUpdateHostMutation()
 	// const onToggleFirstSettings = async (value: boolean) => {
 	//   try {
@@ -65,43 +109,56 @@ export default async function RootLayout({
 	//   }
 	// }
 
-	const { data: usersResult, errors: usersErrors } = await apollo.query<
-		GetUsersQuery,
-		GetUsersQueryVariables
-	>({
-		query: GetUsersDocument,
-		fetchPolicy: 'network-only',
-		errorPolicy: 'all',
-	})
+	// а это без трай-кэтча
+	// const { data: hostResult, errors } = await apollo.mutate<
+	// 	UpdateHostMutation,
+	// 	UpdateHostMutationVariables
+	// >({
+	// 	mutation: UpdateHostDocument,
+	// 	variables: {
+	// 		input: {
+	// 			title: 'Stormic',
+	// 			firstSettings: true,
+	// 		},
+	// 	},
+	// })
 
-	console.log('Пользователи:', JSON.stringify(usersResult.users, null, 2))
+	/////////////////////
 
-	const { data: userResult, errors: userErrors } = await apollo.query<
-		GetUserQuery,
-		GetUserQueryVariables
-	>({
-		query: GetUserDocument,
-		fetchPolicy: 'network-only',
-		errorPolicy: 'all',
-		variables: { id: '2' },
-	})
+	// const { data: usersResult, errors: usersErrors } = await apollo.query<
+	// 	GetUsersQuery,
+	// 	GetUsersQueryVariables
+	// >({
+	// 	query: GetUsersDocument,
+	// 	fetchPolicy: 'network-only',
+	// 	errorPolicy: 'all',
+	// })
 
-	console.log('Пользователь по ID:', JSON.stringify(userResult.user, null, 2))
+	// console.log('Пользователи:', JSON.stringify(usersResult.users, null, 2))
 
-	const { data: hostResult, errors } = await apollo.mutate<
-		UpdateHostMutation,
-		UpdateHostMutationVariables
-	>({
-		mutation: UpdateHostDocument,
-		variables: {
-			input: {
-				title: 'Stormic',
-				firstSettings: true,
-			},
-		},
-	})
+	// const { data: userResult, errors: userErrors } = await apollo.query<
+	// 	GetUserByIdQuery,
+	// 	GetUserByIdQueryVariables
+	// >({
+	// 	query: GetUserByIdDocument,
+	// 	fetchPolicy: 'network-only',
+	// 	errorPolicy: 'all',
+	// 	variables: { id: '2' },
+	// })
 
-	console.log('Настройки хоста:', JSON.stringify(hostResult?.host, null, 2))
+	// console.log('Пользователь по ID:', JSON.stringify(userResult.user, null, 2))
+
+	// const { data: mediaResult, errors: mediaErrors } = await apollo.query<
+	// 	GetMediaByIdQuery,
+	// 	GetMediaByIdQueryVariables
+	// >({
+	// 	query: GetMediaByIdDocument,
+	// 	fetchPolicy: 'network-only',
+	// 	errorPolicy: 'all',
+	// 	variables: { id: '1' },
+	// })
+
+	// console.log('Media по ID:', JSON.stringify(mediaResult.media, null, 2))
 
 	// Базовая разметка, которая будет использоваться в обоих случаях
 	const baseLayout = (content: React.ReactNode) => (
@@ -123,7 +180,12 @@ export default async function RootLayout({
 		return baseLayout(
 			<>
 				<Suspense>
-					<Header />
+					<Header
+						hostSettings={hostResult}
+						communities={communitiesResult}
+						hostSidebarNavigation={sidebarNavigationResult}
+						socialNavigation={socialNavigationResult}
+					/>
 				</Suspense>
 				<div className='min-h-[calc(100vh-8rem)]'>{children}</div>
 			</>
@@ -133,7 +195,13 @@ export default async function RootLayout({
 	return baseLayout(
 		<>
 			<Suspense>
-				<Header currentUser={currentUser} />
+				<Header
+					hostSettings={hostResult}
+					communities={communitiesResult}
+					hostSidebarNavigation={sidebarNavigationResult}
+					socialNavigation={socialNavigationResult}
+					currentUser={currentUser}
+				/>
 			</Suspense>
 			<div className='min-h-[calc(100vh-8rem)]'>{children}</div>
 		</>

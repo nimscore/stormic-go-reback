@@ -4,7 +4,6 @@ export async function getSession() {
 	const cookieStore = await cookies()
 	const token = cookieStore.get('auth_token')?.value
 	if (!token) {
-		console.log('⚠️ [getSession] auth_token cookie not found')
 		return null
 	}
 

@@ -1,0 +1,7 @@
+query GetMediaById($id: ID!) {
+	media(id: $id) {
+		id
+		url
+		createdAt
+	}
+}
