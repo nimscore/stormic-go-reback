@@ -1,10 +1,25 @@
 import { Header } from '@/components/header/header'
-import { GetUsersQuery } from '@/graphql/generated/graphql'
+import {
+	UpdateHostDocument,
+	UpdateHostMutationVariables,
+} from '@/graphql/mutations/generated/UpdateHost.generated'
+import {
+	GetUserDocument,
+	GetUserQueryVariables,
+} from '@/graphql/queries/generated/GetUser.generated'
+import {
+	GetUsersDocument,
+	GetUsersQueryVariables,
+} from '@/graphql/queries/generated/GetUsers.generated'
+import {
+	GetUserQuery,
+	GetUsersQuery,
+	UpdateHostMutation,
+} from '@/graphql/schema/graphql'
 import { apolloClient } from '@/lib/apollo-client'
 import { Providers } from '@/providers'
 import { User } from '@/schema/types'
 import { getSession } from '@/utils/auth/get-session'
-import { gql } from '@apollo/client'
 import { Metadata } from 'next'
 import { Nunito } from 'next/font/google'
 import React, { Suspense } from 'react'
@@ -24,31 +39,6 @@ const nunito = Nunito({
 	weight: ['400', '500', '600', '700', '800', '900'],
 })
 
-const GET_COMMUNITIES = gql`
-	query GetCommunities {
-		communities {
-			id
-			title
-			communityHasBanned
-		}
-	}
-`
-
-const GET_USERS = gql`
-	query GetUsers {
-		users {
-			id
-			name
-			email
-			hostRoles {
-				name
-				color
-			}
-			createdAt
-		}
-	}
-`
-
 export default async function RootLayout({
 	children,
 }: {
@@ -60,12 +50,58 @@ export default async function RootLayout({
 	const apollo = apolloClient()
 
 	// const { data, loading, error } = useQuery(GET_COMMUNITIES)
-	const { data } = await apollo.query<GetUsersQuery>({
-		query: GET_USERS,
+
+	// const [updateHost, { data, loading, error }] = useUpdateHostMutation()
+	// const onToggleFirstSettings = async (value: boolean) => {
+	//   try {
+	//     const result = await updateHost({
+	//       variables: {
+	//         input: { firstSettings: value }
+	//       },
+	//     })
+	//     console.log('Обновлённый host:', result.data?.host)
+	//   } catch (e) {
+	//     console.error(e)
+	//   }
+	// }
+
+	const { data: usersResult, errors: usersErrors } = await apollo.query<
+		GetUsersQuery,
+		GetUsersQueryVariables
+	>({
+		query: GetUsersDocument,
 		fetchPolicy: 'network-only',
+		errorPolicy: 'all',
 	})
 
-	console.log('Пользователи:', data.users)
+	console.log('Пользователи:', JSON.stringify(usersResult.users, null, 2))
+
+	const { data: userResult, errors: userErrors } = await apollo.query<
+		GetUserQuery,
+		GetUserQueryVariables
+	>({
+		query: GetUserDocument,
+		fetchPolicy: 'network-only',
+		errorPolicy: 'all',
+		variables: { id: '2' },
+	})
+
+	console.log('Пользователь по ID:', JSON.stringify(userResult.user, null, 2))
+
+	const { data: hostResult, errors } = await apollo.mutate<
+		UpdateHostMutation,
+		UpdateHostMutationVariables
+	>({
+		mutation: UpdateHostDocument,
+		variables: {
+			input: {
+				title: 'Stormic',
+				firstSettings: true,
+			},
+		},
+	})
+
+	console.log('Настройки хоста:', JSON.stringify(hostResult?.host, null, 2))
 
 	// Базовая разметка, которая будет использоваться в обоих случаях
 	const baseLayout = (content: React.ReactNode) => (

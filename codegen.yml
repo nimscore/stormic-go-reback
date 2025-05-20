@@ -1,8 +1,35 @@
+# codegen.yml
 schema:
   - http://localhost:8080/query
-documents: graphql/**/*.graphql
+
+documents:
+  - './graphql/queries/*.graphql'
+  - './graphql/mutations/*.graphql'
+
 generates:
-  graphql/generated/graphql.ts:
+  ./graphql/schema/graphql.ts:
     plugins:
       - typescript
       - typescript-operations
+
+  './graphql/queries/':
+    preset: near-operation-file-preset
+    presetConfig:
+      baseTypesPath: '../schema/graphql.ts'
+      extension: .generated.tsx
+      folder: generated
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+
+  './graphql/mutations/':
+    preset: near-operation-file-preset
+    presetConfig:
+      baseTypesPath: '../schema/graphql.ts'
+      extension: .generated.tsx
+      folder: generated
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo

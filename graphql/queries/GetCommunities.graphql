@@ -1,0 +1,7 @@
+query GetCommunities {
+	communities {
+		id
+		title
+		communityHasBanned
+	}
+}

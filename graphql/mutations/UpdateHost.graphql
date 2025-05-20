@@ -1,0 +1,6 @@
+mutation UpdateHost($input: UpdateHostInput!) {
+	host(input: $input) {
+		title
+		firstSettings
+	}
+}

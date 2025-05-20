@@ -39,6 +39,8 @@
 	},
 	"devDependencies": {
 		"@eslint/eslintrc": "^3",
+		"@graphql-codegen/near-operation-file-preset": "^3.0.0",
+		"@graphql-codegen/typescript-react-apollo": "^4.3.2",
 		"@tailwindcss/postcss": "^4",
 		"@types/node": "^20",
 		"@types/react": "^19",
