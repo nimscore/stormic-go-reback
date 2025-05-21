@@ -2,9 +2,15 @@ query GetUsers {
 	users {
 		id
 		name
+		slug
 		email
+		description
+		avatar {
+			id
+			url
+		}
 		hostRoles {
-			name
+			title
 			color
 		}
 		createdAt

@@ -2,8 +2,10 @@ query GetHostSidebarNavigation {
 	hostSidebarNavigation {
 		items {
 			id
-			sidebarNavigationID
-			postID
+			post {
+				id
+				title
+			}
 			createdAt
 		}
 	}

@@ -1,0 +1,13 @@
+query GetHostUserBanById($id: ID!) {
+	hostUserBan(id: $id) {
+		user {
+			id
+			name
+			slug
+			avatar {
+				id
+				url
+			}
+		}
+	}
+}

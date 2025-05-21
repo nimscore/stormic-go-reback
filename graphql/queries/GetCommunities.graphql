@@ -3,6 +3,42 @@ query GetCommunities($onlyNotBanned: Boolean!) {
 		id
 		title
 		slug
+		contacts
+		description
+		logo {
+			url
+		}
+		banner {
+			url
+		}
+		owner {
+			id
+			name
+			slug
+			description
+			avatar {
+				url
+			}
+		}
+		tableInfo
+		posts {
+			id
+			title
+			slug
+			author {
+				id
+				name
+				slug
+				avatar {
+					url
+				}
+			}
+		}
+		roles {
+			id
+			title
+		}
 		communityHasBanned
+		createdAt
 	}
 }

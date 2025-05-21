@@ -1,4 +1,7 @@
 import { Header } from '@/components/header/header'
+import { UserBanLogin } from '@/components/info-blocks/user-ban-login'
+import YandexMetrika from '@/components/misc/yandex-metrika'
+import { MobileButtonNavBar } from '@/components/mobile/mobile-button-nav-bar'
 import {
 	GetCommunitiesDocument,
 	GetCommunitiesQueryVariables,
@@ -16,10 +19,15 @@ import {
 	GetHostSocialNavigationQueryVariables,
 } from '@/graphql/queries/generated/GetHostSocialNavigation.generated'
 import {
+	GetHostUserBanByIdDocument,
+	GetHostUserBanByIdQueryVariables,
+} from '@/graphql/queries/generated/GetHostUserBanById.generated'
+import {
 	GetCommunitiesQuery,
 	GetHostQuery,
 	GetHostSidebarNavigationQuery,
 	GetHostSocialNavigationQuery,
+	GetHostUserBanByIdQuery,
 } from '@/graphql/schema/graphql'
 import { apolloClient } from '@/lib/apollo-client'
 import { Providers } from '@/providers'
@@ -27,6 +35,7 @@ import { User } from '@/schema/types'
 import { getSession } from '@/utils/auth/get-session'
 import { Metadata } from 'next'
 import { Nunito } from 'next/font/google'
+import Script from 'next/script'
 import React, { Suspense } from 'react'
 import './globals.css'
 
@@ -91,25 +100,10 @@ export default async function RootLayout({
 			errorPolicy: 'all',
 		})
 
-	// это киентский запрос
+	// это клиентский запрос
 	// const { data, loading, error } = useQuery(GET_COMMUNITIES)
 
-	// это с трай-кэтчем
-	// const [updateHost, { data, loading, error }] = useUpdateHostMutation()
-	// const onToggleFirstSettings = async (value: boolean) => {
-	//   try {
-	//     const result = await updateHost({
-	//       variables: {
-	//         input: { firstSettings: value }
-	//       },
-	//     })
-	//     console.log('Обновлённый host:', result.data?.host)
-	//   } catch (e) {
-	//     console.error(e)
-	//   }
-	// }
-
-	// а это без трай-кэтча
+	// это мутация
 	// const { data: hostResult, errors } = await apollo.mutate<
 	// 	UpdateHostMutation,
 	// 	UpdateHostMutationVariables
@@ -124,29 +118,6 @@ export default async function RootLayout({
 	// })
 
 	/////////////////////
-
-	// const { data: usersResult, errors: usersErrors } = await apollo.query<
-	// 	GetUsersQuery,
-	// 	GetUsersQueryVariables
-	// >({
-	// 	query: GetUsersDocument,
-	// 	fetchPolicy: 'network-only',
-	// 	errorPolicy: 'all',
-	// })
-
-	// console.log('Пользователи:', JSON.stringify(usersResult.users, null, 2))
-
-	// const { data: userResult, errors: userErrors } = await apollo.query<
-	// 	GetUserByIdQuery,
-	// 	GetUserByIdQueryVariables
-	// >({
-	// 	query: GetUserByIdDocument,
-	// 	fetchPolicy: 'network-only',
-	// 	errorPolicy: 'all',
-	// 	variables: { id: '2' },
-	// })
-
-	// console.log('Пользователь по ID:', JSON.stringify(userResult.user, null, 2))
 
 	// const { data: mediaResult, errors: mediaErrors } = await apollo.query<
 	// 	GetMediaByIdQuery,
@@ -168,6 +139,26 @@ export default async function RootLayout({
 				{/* <link href='/favicon.svg' rel='icon' type='image/svg+xml'/> */}
 			</head>
 			<body className={nunito.className}>
+				<Script id='metrika-counter' strategy='afterInteractive'>
+					{counterId
+						? `(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+        ym(${JSON.stringify(counterId)}, "init", {
+          defer: true,
+          clickmap: true,
+          trackLinks: true,
+          accurateTrackBounce: true,
+          webvisor: true
+        });`
+						: ''}
+				</Script>
+				<Suspense fallback={<></>}>
+					<YandexMetrika />
+				</Suspense>
 				<Providers session={session}>
 					<main className='min-h-screen'>{content}</main>
 				</Providers>
@@ -188,10 +179,31 @@ export default async function RootLayout({
 					/>
 				</Suspense>
 				<div className='min-h-[calc(100vh-8rem)]'>{children}</div>
+				<div className='sticky bottom-0 lg:hidden'>
+					<MobileButtonNavBar />
+				</div>
 			</>
 		)
 	}
 
+	// Если пользователь авторизован, проверяем бан
+	const { data: hostUserBanResult, errors: hostUserBanErrors } =
+		await apollo.query<
+			GetHostUserBanByIdQuery,
+			GetHostUserBanByIdQueryVariables
+		>({
+			query: GetHostUserBanByIdDocument,
+			fetchPolicy: 'network-only',
+			errorPolicy: 'all',
+			variables: { id: String(currentUser.id) },
+		})
+
+	// Если пользователь забанен
+	if (hostUserBanResult.hostUserBan) {
+		return baseLayout(<UserBanLogin className='mt-24' />)
+	}
+
+	// Если пользователь авторизован и не забанен
 	return baseLayout(
 		<>
 			<Suspense>
@@ -204,6 +216,9 @@ export default async function RootLayout({
 				/>
 			</Suspense>
 			<div className='min-h-[calc(100vh-8rem)]'>{children}</div>
+			<div className='sticky bottom-0 lg:hidden'>
+				<MobileButtonNavBar />
+			</div>
 		</>
 	)
 }

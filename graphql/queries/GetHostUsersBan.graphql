@@ -1,0 +1,13 @@
+query GetHostUsersBan {
+	hostUsersBan {
+		user {
+			id
+			name
+			slug
+			avatar {
+				id
+				url
+			}
+		}
+	}
+}

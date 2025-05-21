@@ -3,6 +3,23 @@ query GetHost {
 		title
 		slogan
 		contacts
+		owner {
+			id
+			name
+			slug
+			avatar {
+				url
+			}
+		}
+		logo {
+			url
+		}
+		banner {
+			url
+		}
+		authBanner {
+			url
+		}
 		description
 		firstSettings
 	}

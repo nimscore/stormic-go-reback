@@ -1,0 +1,30 @@
+query GetPosts($status: PostStatus!) {
+	posts(status: $status) {
+		id
+		title
+		slug
+		content
+		heroImage {
+			id
+			url
+		}
+		meta
+		author {
+			id
+			name
+			slug
+			description
+		}
+		community {
+			id
+			title
+			slug
+			description
+		}
+		views
+		status
+		createdAt
+		updatedAt
+		publishedAt
+	}
+}

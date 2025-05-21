@@ -1,0 +1,45 @@
+query GetUserPermissions($userId: ID!, $communityId: ID!) {
+	host {
+		owner {
+			id
+		}
+	}
+	user(id: $userId) {
+		id
+		name
+		communitiesRoles {
+			community {
+				id
+			}
+			communityRolesManagement
+			communityUserBan
+			communityUserMute
+			communityDeletePost
+			communityDeleteComments
+			communityRemovePostFromPublication
+		}
+	}
+	community(id: $communityId) {
+		owner {
+			id
+		}
+	}
+	communityUserBan(communityId: $communityId, userId: $userId) {
+		id
+		community {
+			id
+		}
+		user {
+			id
+		}
+	}
+	communityUserMute(communityId: $communityId, userId: $userId) {
+		id
+		community {
+			id
+		}
+		user {
+			id
+		}
+	}
+}

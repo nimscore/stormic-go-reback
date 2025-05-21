@@ -1,0 +1,21 @@
+query GetRoleById($id: ID!) {
+	role(id: $id) {
+		id
+		title
+		color
+		badge {
+			url
+		}
+		community {
+			id
+			title
+			slug
+		}
+		communityRolesManagement
+		communityUserBan
+		communityUserMute
+		communityDeletePost
+		communityDeleteComments
+		communityRemovePostFromPublication
+	}
+}

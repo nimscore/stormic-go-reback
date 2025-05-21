@@ -2,10 +2,33 @@ query GetUserById($id: ID!) {
 	user(id: $id) {
 		id
 		name
+		slug
 		email
+		description
+		avatar {
+			url
+		}
 		hostRoles {
-			name
+			id
+			title
 			color
+			communityRolesManagement
+			hostUserBan
+			hostUserMute
+			hostCommunityDeletePost
+			hostCommunityDeleteComments
+			hostCommunityRemovePostFromPublication
+		}
+		communitiesRoles {
+			id
+			title
+			color
+			communityRolesManagement
+			communityUserBan
+			communityUserMute
+			communityDeletePost
+			communityDeleteComments
+			communityRemovePostFromPublication
 		}
 		createdAt
 	}
