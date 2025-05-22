@@ -1,27 +1,15 @@
 'use client'
 
+import { User } from '@/graphql/schema/graphql'
 import { createContext, useContext } from 'react'
 
-type Session = {
-	user: {
-		id: number
-		name: string
-		email: string
-		userAvatar?: {
-			url: string
-			thumbnailURL: string
-		}
-	}
-	token: string
-} | null
-
-const SessionContext = createContext<Session | null>(null)
+const SessionContext = createContext<User | null>(null)
 
 export default function SessionProvider({
 	session,
-	children
+	children,
 }: {
-	session: Session
+	session: User
 	children: React.ReactNode
 }) {
 	return (

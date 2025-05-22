@@ -1,0 +1,13 @@
+mutation UpdatePost($input: UpdatePostInput!) {
+	post(input: $input) {
+		id
+		title
+		slug
+		content
+		heroImageID
+		communityID
+		views
+		status
+		publishedAt
+	}
+}

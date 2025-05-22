@@ -1,4 +1,5 @@
 import { SortFreshFeedButtons } from '@/components/misc/sort-fresh-feed-buttons'
+import { PostForm } from '@/components/posts/post-form'
 import {
 	GetCommunitiesDocument,
 	GetCommunitiesQueryVariables,
@@ -14,9 +15,6 @@ import {
 	User,
 } from '@/graphql/schema/graphql'
 import { apolloClient } from '@/lib/apollo-client'
-import { getUserPermissions } from '@/lib/getUserPermissions'
-import { Permissions } from '@/lib/permissions'
-// import { PostForm } from '@/shared/components/posts/post-items/post-form'
 import { getSession } from '@/utils/auth/get-session'
 import type { Metadata } from 'next'
 
@@ -50,29 +48,15 @@ export default async function Home() {
 	const posts = postsResult.posts ?? []
 	const communities = communitiesResult.communities ?? []
 
-	// Получаем права для каждого поста
-	const postPermissions: Record<string, Permissions | null> = {}
-	if (currentUser) {
-		await Promise.all(
-			posts.map(async post => {
-				const communityId = post.community.id
-				postPermissions[post.id] = communityId
-					? await getUserPermissions(currentUser.id, communityId)
-					: null
-			})
-		)
-	}
-
 	return (
-		<>
+		<div>
 			<SortFreshFeedButtons className='m-2 lg:m-0' />
-			{/* <PostForm
+			<PostForm
 				limit={5}
-				post={posts}
+				posts={posts}
 				communities={communities}
-				postPermissions={postPermissions}
 				className='lg:mt-2'
-			/> */}
-		</>
+			/>
+		</div>
 	)
 }

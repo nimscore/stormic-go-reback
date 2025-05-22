@@ -23,6 +23,18 @@ query GetPosts($status: PostStatus!) {
 		}
 		views
 		status
+		viewerPermissions {
+			communityRolesManagement
+			communityUserBan
+			communityUserMute
+			communityDeletePost
+			communityDeleteComments
+			communityRemovePostFromPublication
+			communityUserHasBanned
+			communityUserHasMuted
+			communityOwner
+			hostOwner
+		}
 		createdAt
 		updatedAt
 		publishedAt

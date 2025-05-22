@@ -28,10 +28,10 @@ import {
 	GetHostSidebarNavigationQuery,
 	GetHostSocialNavigationQuery,
 	GetHostUserBanByIdQuery,
+	User,
 } from '@/graphql/schema/graphql'
 import { apolloClient } from '@/lib/apollo-client'
 import { Providers } from '@/providers'
-import { User } from '@/schema/types'
 import { getSession } from '@/utils/auth/get-session'
 import { Metadata } from 'next'
 import { Nunito } from 'next/font/google'

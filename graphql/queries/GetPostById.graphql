@@ -5,7 +5,6 @@ query GetPostById($id: ID!) {
 		slug
 		content
 		heroImage {
-			id
 			url
 		}
 		meta
@@ -14,15 +13,29 @@ query GetPostById($id: ID!) {
 			name
 			slug
 			description
+			avatar {
+				url
+			}
 		}
 		community {
 			id
 			title
 			slug
-			description
 		}
 		views
 		status
+		viewerPermissions {
+			communityRolesManagement
+			communityUserBan
+			communityUserMute
+			communityDeletePost
+			communityDeleteComments
+			communityRemovePostFromPublication
+			communityUserHasBanned
+			communityUserHasMuted
+			communityOwner
+			hostOwner
+		}
 		createdAt
 		updatedAt
 		publishedAt

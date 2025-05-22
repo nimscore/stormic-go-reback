@@ -434,6 +434,20 @@ export type CommunityModeratorWhereInput = {
   userIDNotIn?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
+export type CommunityPermissions = {
+  __typename?: 'CommunityPermissions';
+  communityDeleteComments: Scalars['Boolean']['output'];
+  communityDeletePost: Scalars['Boolean']['output'];
+  communityOwner: Scalars['Boolean']['output'];
+  communityRemovePostFromPublication: Scalars['Boolean']['output'];
+  communityRolesManagement: Scalars['Boolean']['output'];
+  communityUserBan: Scalars['Boolean']['output'];
+  communityUserHasBanned: Scalars['Boolean']['output'];
+  communityUserHasMuted: Scalars['Boolean']['output'];
+  communityUserMute: Scalars['Boolean']['output'];
+  hostOwner: Scalars['Boolean']['output'];
+};
+
 export type CommunityRule = Node & {
   __typename?: 'CommunityRule';
   community?: Maybe<Community>;
@@ -1811,11 +1825,17 @@ export type Mutation = {
   __typename?: 'Mutation';
   /** Установить firstSettings у конкретного Host (здесь фиксированного, с id=1) */
   host: Host;
+  post: Post;
 };
 
 
 export type MutationHostArgs = {
   input: UpdateHostInput;
+};
+
+
+export type MutationPostArgs = {
+  input: UpdatePostInput;
 };
 
 /**
@@ -1872,6 +1892,7 @@ export type Post = Node & {
   status: PostStatus;
   title: Scalars['String']['output'];
   updatedAt: Scalars['Time']['output'];
+  viewerPermissions: CommunityPermissions;
   views: Scalars['Int']['output'];
 };
 
@@ -2308,6 +2329,18 @@ export type UpdateHostInput = {
   logoID?: InputMaybe<Scalars['ID']['input']>;
   slogan?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdatePostInput = {
+  communityID?: InputMaybe<Scalars['ID']['input']>;
+  content?: InputMaybe<Scalars['JSON']['input']>;
+  heroImageID?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
+  publishedAt?: InputMaybe<Scalars['Time']['input']>;
+  slug?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<PostStatus>;
+  title?: InputMaybe<Scalars['String']['input']>;
+  views?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type User = Node & {
