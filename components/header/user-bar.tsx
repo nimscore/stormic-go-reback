@@ -3,19 +3,31 @@
 import { ProfileButton } from '@/components/community-profile/profile-button'
 import { AuthModal } from '@/components/modals/auth-modal/auth-modal'
 import { Button } from '@/components/ui/button'
+import {
+	GetCommunityByIdQuery,
+	GetHostQuery,
+	User,
+} from '@/graphql/schema/graphql'
 // import { LocaleToggle } from '@/shared/components/ui/locale-toggle'
 import { cn } from '@/lib/utils'
-import { User } from '@/schema/types'
 import { Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import React from 'react'
+import { NewPostButton } from '../buttons/new-post-button'
 
 interface Props {
-	currentUser?: User
+	hostSettings: NonNullable<GetHostQuery['host']>
+	communities: NonNullable<GetCommunityByIdQuery['community']>[]
+	currentUser?: User | null
 	className?: string
 }
 
-export const HeaderUserBar: React.FC<Props> = ({ currentUser, className }) => {
+export const HeaderUserBar: React.FC<Props> = ({
+	hostSettings,
+	communities,
+	currentUser,
+	className,
+}) => {
 	const [openAuthModal, setOpenAuthModal] = React.useState(false)
 	const router = useRouter()
 
@@ -29,10 +41,13 @@ export const HeaderUserBar: React.FC<Props> = ({ currentUser, className }) => {
 			<AuthModal
 				open={openAuthModal}
 				onClose={() => setOpenAuthModal(false)}
-				logoImage={'/assets/host/logo.png'}
-				authImage={'/assets/host/defaultBanner.jpg'}
-				stormicName={'Stormic'}
+				logoImage={hostSettings.logo?.url || '/assets/host/logo.png'}
+				authImage={
+					hostSettings.authBanner?.url || '/assets/host/defaultBanner.jpg'
+				}
+				stormicName={hostSettings.title || 'Stormic'}
 			/>
+
 			{/* <LocaleToggle /> */}
 
 			{/* <Notifications /> */}
@@ -46,6 +61,12 @@ export const HeaderUserBar: React.FC<Props> = ({ currentUser, className }) => {
 			>
 				<Search size={22} />
 			</Button>
+
+			<NewPostButton
+				host={hostSettings}
+				communities={communities}
+				currentUser={currentUser !== null ? currentUser : undefined}
+			/>
 
 			<ProfileButton
 				currentUser={currentUser}

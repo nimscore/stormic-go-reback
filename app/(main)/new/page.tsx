@@ -12,10 +12,8 @@ import {
 	GetCommunitiesQuery,
 	GetPostsQuery,
 	PostStatus,
-	User,
 } from '@/graphql/schema/graphql'
 import { apolloClient } from '@/lib/apollo-client'
-import { getSession } from '@/utils/auth/get-session'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -23,8 +21,6 @@ export const metadata: Metadata = {
 }
 
 export default async function Home() {
-	const session = (await getSession()) as { user: User } | null
-	const currentUser = session && session.user
 	const apollo = apolloClient()
 
 	const { data: postsResult, errors: postsErrors } = await apollo.query<

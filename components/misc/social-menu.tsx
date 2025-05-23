@@ -8,12 +8,14 @@ import React, { JSX } from 'react'
 
 interface Props {
 	className?: string
-	socialNavigation: GetHostSocialNavigationQuery
+	hostSocialNavigation: NonNullable<
+		GetHostSocialNavigationQuery['hostSocialNavigation']
+	>
 }
 
 export const SocialMenu: React.FC<Props> = ({
 	className,
-	socialNavigation,
+	hostSocialNavigation,
 }) => {
 	const socialMenu: {
 		id: number
@@ -24,31 +26,31 @@ export const SocialMenu: React.FC<Props> = ({
 		{
 			id: 1,
 			icon: <Github size={24} />,
-			path: socialNavigation.hostSocialNavigation?.github,
+			path: hostSocialNavigation.github,
 			name: 'GitHub',
 		},
 		{
 			id: 2,
 			icon: <Globe size={24} />,
-			path: socialNavigation.hostSocialNavigation?.site,
+			path: hostSocialNavigation.site,
 			name: 'Сайт',
 		},
 		{
 			id: 3,
 			icon: <Send size={24} />,
-			path: socialNavigation.hostSocialNavigation?.telegram,
+			path: hostSocialNavigation.telegram,
 			name: 'Telegram',
 		},
 		{
 			id: 4,
 			icon: <Instagram size={24} />,
-			path: socialNavigation.hostSocialNavigation?.instagram,
+			path: hostSocialNavigation.instagram,
 			name: 'Instagram',
 		},
 		{
 			id: 5,
 			icon: <Twitter size={24} />,
-			path: socialNavigation.hostSocialNavigation?.twitter,
+			path: hostSocialNavigation.twitter,
 			name: 'Twitter',
 		},
 		{
@@ -60,7 +62,7 @@ export const SocialMenu: React.FC<Props> = ({
 					className='w-6 h-6 dark:filter dark:brightness-0 dark:invert'
 				/>
 			),
-			path: socialNavigation.hostSocialNavigation?.mastodon,
+			path: hostSocialNavigation.mastodon,
 			name: 'Mastodon',
 		},
 	].filter(

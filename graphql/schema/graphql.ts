@@ -813,6 +813,23 @@ export type CommunityWhereInput = {
   updatedAtNotIn?: InputMaybe<Array<Scalars['Time']['input']>>;
 };
 
+export type CreateCommunityInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  ownerID: Scalars['ID']['input'];
+  slug: Scalars['String']['input'];
+  title: Scalars['String']['input'];
+};
+
+export type CreatePostInput = {
+  authorID: Scalars['ID']['input'];
+  communityID: Scalars['ID']['input'];
+  content: Scalars['JSON']['input'];
+  heroImageID?: InputMaybe<Scalars['ID']['input']>;
+  publishedAt?: InputMaybe<Scalars['Time']['input']>;
+  status?: InputMaybe<PostStatus>;
+  title: Scalars['String']['input'];
+};
+
 export type EmailVerification = Node & {
   __typename?: 'EmailVerification';
   createdAt: Scalars['Time']['output'];
@@ -1818,9 +1835,21 @@ export type MediaWhereInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createCommunity: Community;
+  createPost: Post;
   /** Установить firstSettings у конкретного Host (здесь фиксированного, с id=1) */
   host: Host;
   post: Post;
+};
+
+
+export type MutationCreateCommunityArgs = {
+  input: CreateCommunityInput;
+};
+
+
+export type MutationCreatePostArgs = {
+  input: CreatePostInput;
 };
 
 
@@ -2627,6 +2656,20 @@ export type UserWhereInput = {
   updatedAtNotIn?: InputMaybe<Array<Scalars['Time']['input']>>;
 };
 
+export type CreateCommunityMutationVariables = Exact<{
+  input: CreateCommunityInput;
+}>;
+
+
+export type CreateCommunityMutation = { __typename?: 'Mutation', createCommunity: { __typename?: 'Community', title: string, slug: string, description?: string | null, ownerID: string } };
+
+export type CreatePostMutationVariables = Exact<{
+  input: CreatePostInput;
+}>;
+
+
+export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Post', title: string, content: any, heroImageID?: string | null, authorID: string, communityID: string, status: PostStatus, publishedAt?: any | null } };
+
 export type UpdateHostMutationVariables = Exact<{
   input: UpdateHostInput;
 }>;
@@ -2639,7 +2682,7 @@ export type UpdatePostMutationVariables = Exact<{
 }>;
 
 
-export type UpdatePostMutation = { __typename?: 'Mutation', post: { __typename?: 'Post', id: string, title: string, slug: string, content: any, heroImageID?: string | null, communityID: string, views: number, status: PostStatus, publishedAt?: any | null } };
+export type UpdatePostMutation = { __typename?: 'Mutation', post: { __typename?: 'Post', id: string, title: string, content: any, views: number, status: PostStatus, publishedAt?: any | null } };
 
 export type GetCommunitiesQueryVariables = Exact<{
   onlyNotBanned: Scalars['Boolean']['input'];
@@ -2716,6 +2759,11 @@ export type GetRolesByCommunityIdQueryVariables = Exact<{
 
 
 export type GetRolesByCommunityIdQuery = { __typename?: 'Query', roles: Array<{ __typename?: 'Role', id: string, title: string, color?: string | null, communityRolesManagement: boolean, communityUserBan: boolean, communityUserMute: boolean, communityDeletePost: boolean, communityRemovePostFromPublication: boolean, badge?: { __typename?: 'Media', url?: string | null } | null, community: { __typename?: 'Community', id: string, title: string, slug: string } }> };
+
+export type GetStartedLayoutQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetStartedLayoutQuery = { __typename?: 'Query', host?: { __typename?: 'Host', title?: string | null, slogan?: string | null, contacts?: string | null, description?: string | null, firstSettings: boolean, owner?: { __typename?: 'User', id: string, name: string, slug: string, avatar?: { __typename?: 'Media', url?: string | null } | null } | null, logo?: { __typename?: 'Media', url?: string | null } | null, banner?: { __typename?: 'Media', url?: string | null } | null, authBanner?: { __typename?: 'Media', url?: string | null } | null } | null, hostSidebarNavigation?: { __typename?: 'HostSidebarNavigation', items?: Array<{ __typename?: 'HostSidebarNavigationItem', id: string, createdAt: any, post: { __typename?: 'Post', id: string, title: string } }> | null } | null, hostSocialNavigation?: { __typename?: 'HostSocialNavigation', github?: string | null, site?: string | null, telegram?: string | null, instagram?: string | null, twitter?: string | null, mastodon?: string | null } | null };
 
 export type GetUserByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];

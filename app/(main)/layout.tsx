@@ -4,23 +4,17 @@ import { Container } from '@/components/misc/container'
 import { FeedUserMenu } from '@/components/misc/feed-user-menu'
 import { NavigationMenuForm } from '@/components/misc/navigation-menu-form'
 import { SideFooter } from '@/components/misc/side-footer'
-import { SocialMenu } from '@/components/misc/social-menu'
 import {
 	GetCommunitiesDocument,
 	GetCommunitiesQueryVariables,
 } from '@/graphql/queries/generated/GetCommunities.generated'
 import {
-	GetHostSidebarNavigationDocument,
-	GetHostSidebarNavigationQueryVariables,
-} from '@/graphql/queries/generated/GetHostSidebarNavigation.generated'
-import {
-	GetHostSocialNavigationDocument,
-	GetHostSocialNavigationQueryVariables,
-} from '@/graphql/queries/generated/GetHostSocialNavigation.generated'
+	GetStartedLayoutDocument,
+	GetStartedLayoutQueryVariables,
+} from '@/graphql/queries/generated/GetStartedLayout.generated'
 import {
 	GetCommunitiesQuery,
-	GetHostSidebarNavigationQuery,
-	GetHostSocialNavigationQuery,
+	GetStartedLayoutQuery,
 } from '@/graphql/schema/graphql'
 import { apolloClient } from '@/lib/apollo-client'
 import type { Metadata } from 'next'
@@ -38,23 +32,10 @@ export default async function MainLayout({
 }>) {
 	const apollo = apolloClient()
 
-	const { data: sidebarNavigationResult, errors: sidebarNavigationErrors } =
-		await apollo.query<
-			GetHostSidebarNavigationQuery,
-			GetHostSidebarNavigationQueryVariables
-		>({
-			query: GetHostSidebarNavigationDocument,
-			fetchPolicy: 'cache-first',
-			errorPolicy: 'all',
-		})
-
-	const { data: socialNavigationResult, errors: socialNavigationErrors } =
-		await apollo.query<
-			GetHostSocialNavigationQuery,
-			GetHostSocialNavigationQueryVariables
-		>({
-			query: GetHostSocialNavigationDocument,
-			fetchPolicy: 'cache-first',
+	const { data: startedLayoutResult, errors: startedLayoutErrors } =
+		await apollo.query<GetStartedLayoutQuery, GetStartedLayoutQueryVariables>({
+			query: GetStartedLayoutDocument,
+			fetchPolicy: 'network-only',
 			errorPolicy: 'all',
 		})
 
@@ -68,7 +49,7 @@ export default async function MainLayout({
 
 	const communities = communitiesResult.communities ?? []
 	const sidebarNavigation =
-		sidebarNavigationResult.hostSidebarNavigation?.items ?? []
+		startedLayoutResult.hostSidebarNavigation?.items ?? []
 
 	return (
 		<>
@@ -86,7 +67,11 @@ export default async function MainLayout({
 
 						<NavigationMenuForm data={sidebarNavigation} />
 
-						<SocialMenu socialNavigation={socialNavigationResult} />
+						{/* <SocialMenu
+							hostSocialNavigation={
+								socialNavigationResult.hostSocialNavigation
+							}
+						/> */}
 
 						<SideFooter />
 					</div>

@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 
 interface Media {
+	id?: number
 	url: string
 }
 
@@ -25,6 +26,7 @@ export default function UploadPage() {
 				{commentImage && (
 					<div className='mt-4'>
 						<p>Загруженное изображение:</p>
+						<p>{commentImage.id}</p>
 						<img
 							src={commentImage.url}
 							alt='Uploaded'

@@ -10,8 +10,8 @@ import { Button } from '../ui/button'
 
 interface Props {
 	data: NonNullable<
-		NonNullable<GetHostSidebarNavigationQuery['hostSidebarNavigation']>['items']
-	>
+		GetHostSidebarNavigationQuery['hostSidebarNavigation']
+	>['items']
 	className?: string
 }
 

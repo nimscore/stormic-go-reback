@@ -1,13 +1,12 @@
-// import { BookmarkButton } from '@/shared/components/bookmark-button'
-import { BookmarkButton } from '@/shared/components/bookmark-button'
-import { PostLikeButton } from '@/shared/components/post-like-button'
-import { cn } from '@/shared/lib/utils'
+import { cn } from '@/lib/utils'
 import { Eye, MessageCircle } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
+import { BookmarkButton } from '../buttons/bookmark-button'
+import { PostLikeButton } from '../buttons/post-like-button'
 
 export interface PostFooterProps {
-	postId: number
+	postId: string
 	postTags?: string[]
 	commentsCount: number
 	views: number
@@ -19,7 +18,7 @@ export const PostFooter: React.FC<PostFooterProps> = ({
 	postTags,
 	commentsCount,
 	views,
-	className
+	className,
 }) => {
 	return (
 		<div className={cn('', className)}>

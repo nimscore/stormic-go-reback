@@ -75,7 +75,7 @@ export const PostItem: React.FC<{
 				/>
 				{!relatedPost ? (
 					<PostFooter
-						postId={Number(post.id)}
+						postId={post.id}
 						commentsCount={commentsCount}
 						views={post.views}
 						className='mt-4'

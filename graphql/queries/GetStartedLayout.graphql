@@ -1,0 +1,44 @@
+query GetStartedLayout {
+	host {
+		title
+		slogan
+		contacts
+		owner {
+			id
+			name
+			slug
+			avatar {
+				url
+			}
+		}
+		logo {
+			url
+		}
+		banner {
+			url
+		}
+		authBanner {
+			url
+		}
+		description
+		firstSettings
+	}
+	hostSidebarNavigation {
+		items {
+			id
+			post {
+				id
+				title
+			}
+			createdAt
+		}
+	}
+	hostSocialNavigation {
+		github
+		site
+		telegram
+		instagram
+		twitter
+		mastodon
+	}
+}

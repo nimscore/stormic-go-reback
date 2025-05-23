@@ -6,6 +6,7 @@ import { toast } from 'sonner'
 import { createMedia } from './createMedia'
 
 interface Media {
+	id?: number
 	url: string
 }
 
@@ -18,14 +19,14 @@ interface ImageUploaderProps {
 export const ImageUploader: React.FC<ImageUploaderProps> = ({
 	setCommentImage,
 	setIsUploading,
-	setS3Path
+	setS3Path,
 }) => {
 	const inputRef = useRef<HTMLInputElement>(null)
 
 	const handleUpload = async (file: File) => {
 		setIsUploading(true)
 		const formData = new FormData()
-		formData.append("file", file)
+		formData.append('file', file)
 		try {
 			const result = await createMedia(formData, `${setS3Path}`)
 			setCommentImage({ url: result.url })

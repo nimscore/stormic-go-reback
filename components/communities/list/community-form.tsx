@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { GetCommunitiesQuery } from '@/graphql/schema/graphql'
+import { GetCommunityByIdQuery } from '@/graphql/schema/graphql'
 import { cn } from '@/lib/utils'
 import { Component } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
@@ -10,7 +10,7 @@ import { Skeleton } from '../../ui/skeleton'
 import { CommunitiesItem } from './community-item'
 
 interface Props {
-	communities: NonNullable<GetCommunitiesQuery['communities']>
+	communities: NonNullable<GetCommunityByIdQuery['community']>[]
 	loading?: boolean
 	limit?: number
 	className?: string

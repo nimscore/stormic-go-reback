@@ -818,6 +818,23 @@ export type CommunityWhereInput = {
   updatedAtNotIn?: InputMaybe<Array<Scalars['Time']['input']>>;
 };
 
+export type CreateCommunityInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  ownerID: Scalars['ID']['input'];
+  slug: Scalars['String']['input'];
+  title: Scalars['String']['input'];
+};
+
+export type CreatePostInput = {
+  authorID: Scalars['ID']['input'];
+  communityID: Scalars['ID']['input'];
+  content: Scalars['JSON']['input'];
+  heroImageID?: InputMaybe<Scalars['ID']['input']>;
+  publishedAt?: InputMaybe<Scalars['Time']['input']>;
+  status?: InputMaybe<PostStatus>;
+  title: Scalars['String']['input'];
+};
+
 export type EmailVerification = Node & {
   __typename?: 'EmailVerification';
   createdAt: Scalars['Time']['output'];
@@ -1823,9 +1840,21 @@ export type MediaWhereInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createCommunity: Community;
+  createPost: Post;
   /** Установить firstSettings у конкретного Host (здесь фиксированного, с id=1) */
   host: Host;
   post: Post;
+};
+
+
+export type MutationCreateCommunityArgs = {
+  input: CreateCommunityInput;
+};
+
+
+export type MutationCreatePostArgs = {
+  input: CreatePostInput;
 };
 
 
@@ -2637,7 +2666,7 @@ export type UpdatePostMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdatePostMutation = { __typename?: 'Mutation', post: { __typename?: 'Post', id: string, title: string, slug: string, content: any, heroImageID?: string | null, communityID: string, views: number, status: Types.PostStatus, publishedAt?: any | null } };
+export type UpdatePostMutation = { __typename?: 'Mutation', post: { __typename?: 'Post', id: string, title: string, content: any, views: number, status: Types.PostStatus, publishedAt?: any | null } };
 
 
 export const UpdatePostDocument = gql`
@@ -2645,10 +2674,7 @@ export const UpdatePostDocument = gql`
   post(input: $input) {
     id
     title
-    slug
     content
-    heroImageID
-    communityID
     views
     status
     publishedAt

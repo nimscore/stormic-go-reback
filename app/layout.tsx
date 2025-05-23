@@ -7,27 +7,17 @@ import {
 	GetCommunitiesQueryVariables,
 } from '@/graphql/queries/generated/GetCommunities.generated'
 import {
-	GetHostDocument,
-	GetHostQueryVariables,
-} from '@/graphql/queries/generated/GetHost.generated'
-import {
-	GetHostSidebarNavigationDocument,
-	GetHostSidebarNavigationQueryVariables,
-} from '@/graphql/queries/generated/GetHostSidebarNavigation.generated'
-import {
-	GetHostSocialNavigationDocument,
-	GetHostSocialNavigationQueryVariables,
-} from '@/graphql/queries/generated/GetHostSocialNavigation.generated'
-import {
 	GetHostUserBanByIdDocument,
 	GetHostUserBanByIdQueryVariables,
 } from '@/graphql/queries/generated/GetHostUserBanById.generated'
 import {
+	GetStartedLayoutDocument,
+	GetStartedLayoutQueryVariables,
+} from '@/graphql/queries/generated/GetStartedLayout.generated'
+import {
 	GetCommunitiesQuery,
-	GetHostQuery,
-	GetHostSidebarNavigationQuery,
-	GetHostSocialNavigationQuery,
 	GetHostUserBanByIdQuery,
+	GetStartedLayoutQuery,
 	User,
 } from '@/graphql/schema/graphql'
 import { apolloClient } from '@/lib/apollo-client'
@@ -63,12 +53,9 @@ export default async function RootLayout({
 	const currentUser = session && session.user
 	const apollo = apolloClient()
 
-	const { data: sidebarNavigationResult, errors: sidebarNavigationErrors } =
-		await apollo.query<
-			GetHostSidebarNavigationQuery,
-			GetHostSidebarNavigationQueryVariables
-		>({
-			query: GetHostSidebarNavigationDocument,
+	const { data: startedLayoutResult, errors: startedLayoutErrors } =
+		await apollo.query<GetStartedLayoutQuery, GetStartedLayoutQueryVariables>({
+			query: GetStartedLayoutDocument,
 			fetchPolicy: 'network-only',
 			errorPolicy: 'all',
 		})
@@ -79,25 +66,6 @@ export default async function RootLayout({
 			fetchPolicy: 'network-only',
 			errorPolicy: 'all',
 			variables: { onlyNotBanned: true },
-		})
-
-	const { data: hostResult, errors: hostResultErrors } = await apollo.query<
-		GetHostQuery,
-		GetHostQueryVariables
-	>({
-		query: GetHostDocument,
-		fetchPolicy: 'network-only',
-		errorPolicy: 'all',
-	})
-
-	const { data: socialNavigationResult, errors: socialNavigationErrors } =
-		await apollo.query<
-			GetHostSocialNavigationQuery,
-			GetHostSocialNavigationQueryVariables
-		>({
-			query: GetHostSocialNavigationDocument,
-			fetchPolicy: 'network-only',
-			errorPolicy: 'all',
 		})
 
 	// это клиентский запрос
@@ -172,10 +140,12 @@ export default async function RootLayout({
 			<>
 				<Suspense>
 					<Header
-						hostSettings={hostResult}
-						communities={communitiesResult}
-						hostSidebarNavigation={sidebarNavigationResult}
-						socialNavigation={socialNavigationResult}
+						hostSettings={startedLayoutResult.host!}
+						communities={communitiesResult.communities}
+						hostSidebarNavigation={
+							startedLayoutResult.hostSidebarNavigation?.items
+						}
+						socialNavigation={startedLayoutResult.hostSocialNavigation!}
 					/>
 				</Suspense>
 				<div className='min-h-[calc(100vh-8rem)]'>{children}</div>
@@ -208,10 +178,12 @@ export default async function RootLayout({
 		<>
 			<Suspense>
 				<Header
-					hostSettings={hostResult}
-					communities={communitiesResult}
-					hostSidebarNavigation={sidebarNavigationResult}
-					socialNavigation={socialNavigationResult}
+					hostSettings={startedLayoutResult.host!}
+					communities={communitiesResult.communities}
+					hostSidebarNavigation={
+						startedLayoutResult.hostSidebarNavigation?.items
+					}
+					socialNavigation={startedLayoutResult.hostSocialNavigation!}
 					currentUser={currentUser}
 				/>
 			</Suspense>

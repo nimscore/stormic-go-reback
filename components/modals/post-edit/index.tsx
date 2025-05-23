@@ -13,12 +13,18 @@ import {
 	DrawerHeader,
 	DrawerTitle,
 } from '@/components/ui/drawer'
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import {
+	CreatePostDocument,
+	CreatePostMutationVariables,
+} from '@/graphql/mutations/generated/CreatePost.generated'
 import {
 	UpdatePostDocument,
 	UpdatePostMutationVariables,
 } from '@/graphql/mutations/generated/UpdatePost.generated'
 import { GetPostByIdDocument } from '@/graphql/queries/generated/GetPostById.generated'
 import {
+	CreatePostMutation,
 	GetCommunityByIdQuery,
 	GetPostByIdQuery,
 	PostStatus,
@@ -37,11 +43,10 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { FormInput } from '../../form'
 import { MetaSidebar } from '../../posts/edit/meta-sidebar'
-import { SidebarProvider, SidebarTrigger } from '../../ui/sidebar'
 import { formTitleSchema, TFormTitleValues } from './schemas'
 
 interface Props {
-	post: NonNullable<GetPostByIdQuery['post']>
+	post?: GetPostByIdQuery['post']
 	communities: NonNullable<GetCommunityByIdQuery['community']>[]
 	currentUser: User
 	open: boolean
@@ -58,8 +63,9 @@ export const PostEditModal: React.FC<Props> = ({
 	onClose,
 }) => {
 	const router = useRouter()
-
 	const isMobile = useIsMobile()
+	const isEditing = post && Boolean(post?.id)
+	const isExistingPostPublished = post?.status === PostStatus.Published
 
 	const form = useForm<TFormTitleValues>({
 		resolver: zodResolver(formTitleSchema),
@@ -78,6 +84,11 @@ export const PostEditModal: React.FC<Props> = ({
 		post?.meta?.description || ''
 	)
 
+	const [createPost] = useMutation<
+		CreatePostMutation,
+		CreatePostMutationVariables
+	>(CreatePostDocument)
+
 	const [updatePost, { loading: mutating, error: mutateError }] = useMutation<
 		UpdatePostMutation,
 		UpdatePostMutationVariables
@@ -89,119 +100,93 @@ export const PostEditModal: React.FC<Props> = ({
 
 	const currentTime = useCurrentTime()
 
-	const handlePublish = async (e: React.FormEvent) => {
-		e.preventDefault()
+	const execute = async (status: PostStatus) => {
 		if (!content) return
 
-		try {
-			await updatePost({
-				variables: {
-					input: {
-						id: post.id,
-						title: form.getValues().title,
-						content: content as any,
-						status: PostStatus.Published,
-						publishedAt: post.publishedAt || currentTime,
-						heroImageID: heroImage || null,
-						// meta: {
-						// 	title: seotitle,
-						// 	description: seodescription,
-						// },
-						communityID: selectedCommunityId,
-					},
-				},
-				refetchQueries: [
-					{
-						query: GetPostByIdDocument,
-						variables: { id: post.id },
-					},
-				],
-				awaitRefetchQueries: true,
-			})
+		const input = {
+			...(isEditing ? { id: post.id } : {}),
+			title: form.getValues().title,
+			content: content as any,
+			status,
+			authorID: currentUser.id,
+			communityID: selectedCommunityId,
+			heroImageID: heroImage || null,
+			publishedAt:
+				status === PostStatus.Published
+					? post?.publishedAt || currentTime
+					: undefined,
+		}
 
-			toast.success('Пост опубликован ✅')
+		try {
+			if (isEditing) {
+				await updatePost({
+					variables: { input: input as UpdatePostMutationVariables['input'] },
+					refetchQueries: [
+						{ query: GetPostByIdDocument, variables: { id: post.id } },
+					],
+					awaitRefetchQueries: true,
+				})
+				toast.success(
+					status === PostStatus.Published
+						? 'Пост опубликован ✅'
+						: 'Черновик сохранён ✅'
+				)
+			} else {
+				await createPost({
+					variables: { input },
+				})
+				toast.success(
+					status === PostStatus.Published
+						? 'Пост создан и опубликован ✅'
+						: 'Черновик создан ✅'
+				)
+			}
 			onClose()
 			router.refresh()
 		} catch (error) {
 			console.error(error)
-			toast.error('Ошибка при публикации ❌')
+			toast.error('Ошибка при сохранении поста ❌')
 		}
 	}
 
-	const handleSaveDraft = async (e: React.FormEvent) => {
+	const handlePublish = (e: React.FormEvent) => {
 		e.preventDefault()
-		if (!content) return
+		execute(PostStatus.Published)
+	}
 
-		try {
-			await updatePost({
-				variables: {
-					input: {
-						id: post.id,
-						title: form.getValues().title,
-						content: content as any,
-						status: PostStatus.Draft,
-						heroImageID: heroImage || null,
-						// meta: {
-						// 	title: seotitle,
-						// 	description: seodescription,
-						// },
-						communityID: selectedCommunityId,
-					},
-				},
-				refetchQueries: [
-					{
-						query: GetPostByIdDocument,
-						variables: { id: post.id },
-					},
-				],
-				awaitRefetchQueries: true,
-			})
-
-			toast.success('Черновик сохранён ✅')
-			onClose()
-			router.refresh()
-		} catch (error) {
-			console.error(error)
-			toast.error('Ошибка при сохранении черновика ❌')
-		}
+	const handleSaveDraft = (e: React.FormEvent) => {
+		e.preventDefault()
+		execute(PostStatus.Draft)
 	}
 
 	const handleToggleDelete = async () => {
+		if (!isEditing) return
 		try {
 			await updatePost({
 				variables: {
-					input: {
-						id: post.id,
-						status: isPostDeleted ? PostStatus.Draft : PostStatus.Deleted,
-					},
+					input: { id: post.id, status: 'deleted' as PostStatus },
 				},
 				refetchQueries: [
-					{
-						query: GetPostByIdDocument,
-						variables: { id: post.id },
-					},
+					{ query: GetPostByIdDocument, variables: { id: post.id } },
 				],
 				awaitRefetchQueries: true,
 			})
-
-			toast.success(isPostDeleted ? 'Пост восстановлен ✅' : 'Пост удалён ❌')
+			toast.success('Пост удалён ❌')
 			onClose()
 			router.refresh()
 		} catch (error) {
-			console.error('Ошибка при удалении/восстановлении поста:', error)
+			console.error('Ошибка при удалении:', error)
 			toast.error('Произошла ошибка ❌')
 		}
 	}
 
-	const isExistingPostPublished = post?.status === 'published'
-	const isPostDeleted = post?.status === 'deleted'
-
+	const isPostDeleted = post?.status === PostStatus.Deleted
 	const authorAvatar = currentUser.avatar?.url || '/logo.png'
 
 	if (!isMobile) {
 		return (
 			<Dialog open={open} onOpenChange={onClose}>
-				<DialogContent className='bg-secondary p-4 w-full max-w-[100vw] h-[100vh] flex flex-col m-0 rounded-none'>
+				<DialogContent className='bg-secondary p-4 w-full min-w-[100vw] h-[100vh] flex flex-col m-0 rounded-none'>
 					<DialogHeader className='hidden'>
 						<DialogTitle />
 					</DialogHeader>
