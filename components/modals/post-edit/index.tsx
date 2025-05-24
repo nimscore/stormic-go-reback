@@ -102,14 +102,15 @@ export const PostEditModal: React.FC<Props> = ({
 
 	const execute = async (status: PostStatus) => {
 		if (!content) return
-
+		console.log('imageId:', heroImage)
 		const input = {
 			...(isEditing ? { id: post.id } : {}),
 			title: form.getValues().title,
-			content: content as any,
+			content: JSON.stringify(content),
 			status,
-			authorID: currentUser.id,
-			communityID: selectedCommunityId,
+			authorID: '1',
+			communityID: '1',
+			// communityID: selectedCommunityId,
 			heroImageID: heroImage || null,
 			publishedAt:
 				status === PostStatus.Published
@@ -143,8 +144,10 @@ export const PostEditModal: React.FC<Props> = ({
 			}
 			onClose()
 			router.refresh()
-		} catch (error) {
-			console.error(error)
+		} catch (error: any) {
+			console.error('CreatePost error', error)
+			console.error('graphQLErrors', error.graphQLErrors)
+			console.error('networkError', error.networkError)
 			toast.error('Ошибка при сохранении поста ❌')
 		}
 	}

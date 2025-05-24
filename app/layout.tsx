@@ -18,7 +18,6 @@ import {
 	GetCommunitiesQuery,
 	GetHostUserBanByIdQuery,
 	GetStartedLayoutQuery,
-	User,
 } from '@/graphql/schema/graphql'
 import { apolloClient } from '@/lib/apollo-client'
 import { Providers } from '@/providers'
@@ -49,7 +48,7 @@ export default async function RootLayout({
 	children: React.ReactNode
 }) {
 	const counterId = process.env.NEXT_PUBLIC_YANDEX_METRIKA
-	const session = (await getSession()) as { user: User } | null
+	const session = await getSession()
 	const currentUser = session && session.user
 	const apollo = apolloClient()
 
@@ -127,7 +126,7 @@ export default async function RootLayout({
 				<Suspense fallback={<></>}>
 					<YandexMetrika />
 				</Suspense>
-				<Providers session={session}>
+				<Providers session={currentUser}>
 					<main className='min-h-screen'>{content}</main>
 				</Providers>
 			</body>

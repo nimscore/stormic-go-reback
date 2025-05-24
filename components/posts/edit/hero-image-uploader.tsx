@@ -23,7 +23,7 @@ export const HeroImageUploader: React.FC<HeroImageUploaderProps> = ({
 		formData.append('file', file)
 		try {
 			const result = await createMedia(formData)
-			setHeroImage(result.url)
+			setHeroImage(result.id)
 		} catch (error) {
 			toast.error('Ошибка при загрузке изображения', { icon: '❌' })
 		} finally {

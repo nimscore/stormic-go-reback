@@ -30,13 +30,13 @@ export const BookmarkButton: React.FC<BookmarksButtonProps> = ({ postId }) => {
 			<div className='flex group items-center cursor-pointer'>
 				{isAdded ? (
 					<>
-						<Bookmark className='bg-theme-hover/20 text-theme rounded-xl mr-1 w-7 h-7 p-1' />
-						<span className='text-theme font-bold'>{bookmarksCount}</span>
+						<Bookmark className='bg-accent/20 text-accent rounded-xl mr-1 w-7 h-7 p-1' />
+						<span className='text-accent font-bold'>{bookmarksCount}</span>
 					</>
 				) : (
 					<>
-						<Bookmark className='group-hover:bg-theme-hover/20 group-hover:text-theme rounded-xl mr-1 w-7 h-7 p-1' />
-						<span className='group-hover:text-theme font-bold'>
+						<Bookmark className='group-hover:bg-accent/20 group-hover:text-accent rounded-xl mr-1 w-7 h-7 p-1' />
+						<span className='group-hover:text-accent font-bold'>
 							{bookmarksCount}
 						</span>
 					</>

@@ -49,7 +49,7 @@ export const NewPostButton: React.FC<Props> = ({
 			)}
 
 			<Button
-				variant='secondary'
+				variant='accent'
 				className='text-base font-bold rounded-xl text-background'
 				type='button'
 				onClick={

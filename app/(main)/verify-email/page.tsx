@@ -50,7 +50,7 @@ export default function VerifyEmailPage() {
 			<div className='max-w-md mx-auto py-8 text-center'>
 				<h1 className='text-2xl font-bold text-foreground'>Ошибка</h1>
 				<p className='text-red-500'>{error}</p>
-				<a href='/' className='text-theme underline'>
+				<a href='/' className='text-accent underline'>
 					Вернуться на главную
 				</a>
 			</div>

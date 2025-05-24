@@ -1,10 +1,10 @@
-import { Button } from '@/components/ui/button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import React from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 // import { useIntl } from 'react-intl'
 import { FormInput, FormTextarea } from '@/components/form'
 import { Title } from '@/components/misc/title'
+import { Button } from '@/components/ui/button'
 import {
 	CreateCommunityDocument,
 	CreateCommunityMutationVariables,
@@ -26,7 +26,6 @@ export const NewCommunityForm: React.FC<Props> = ({ userId, onClose }) => {
 	const form = useForm<TFormCommunityValues>({
 		resolver: zodResolver(formCommunitySchema),
 		defaultValues: {
-			userId,
 			title: '',
 			slug: '',
 			description: '',
@@ -46,19 +45,20 @@ export const NewCommunityForm: React.FC<Props> = ({ userId, onClose }) => {
 						title: data.title,
 						slug: data.slug,
 						description: data.description,
-						ownerID: String(userId),
+						ownerID: userId,
 					},
 				},
 			})
-			toast.success('Сообщество успешно создано', {
-				icon: '✅',
-			})
+			toast.success('Сообщество успешно создано', { icon: '✅' })
 			onClose?.()
 			router.refresh()
-		} catch (error) {
-			return toast.error('Сообщество не создано', {
-				icon: '❌',
-			})
+		} catch (error: any) {
+			const msg = error.graphQLErrors?.[0]?.message || ''
+			if (msg.includes('already exists')) {
+				toast.error('Указанный адрес занят', { icon: '⚠️' })
+			} else {
+				toast.error('Сообщество не создано', { icon: '❌' })
+			}
 		}
 	}
 
@@ -98,10 +98,9 @@ export const NewCommunityForm: React.FC<Props> = ({ userId, onClose }) => {
 				/>
 
 				<Button
-					variant='secondary'
-					// loading={form.formState.isSubmitting}
+					variant='accent'
+					loading={form.formState.isSubmitting}
 					className='flex items-center gap-2 font-bold text-background rounded-xl'
-					type='submit'
 				>
 					Создать
 				</Button>

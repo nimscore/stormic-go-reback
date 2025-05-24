@@ -10,7 +10,6 @@ export const descriptionSchema = z
 	.max(1000, { message: 'Максимум 100 символов в описании' })
 
 export const formCommunitySchema = z.object({
-	userId: userSchema,
 	title: titleSchema,
 	slug: titleSchema,
 	description: descriptionSchema,
