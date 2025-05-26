@@ -3,7 +3,6 @@ mutation UpdatePost($input: UpdatePostInput!) {
 		id
 		title
 		content
-		views
 		status
 		publishedAt
 	}

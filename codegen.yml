@@ -11,6 +11,9 @@ generates:
     plugins:
       - typescript
       - typescript-operations
+    config:
+      scalars:
+        JSON: any
 
   './graphql/queries/':
     preset: near-operation-file-preset

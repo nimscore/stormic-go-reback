@@ -5,6 +5,11 @@ query GetUsers {
 		slug
 		email
 		description
+		userInfo {
+			id
+			key
+			value
+		}
 		avatar {
 			id
 			url

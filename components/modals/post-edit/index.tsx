@@ -79,10 +79,8 @@ export const PostEditModal: React.FC<Props> = ({
 		post?.community.id || ''
 	)
 	const [heroImage, setHeroImage] = useState<string>(post?.heroImage?.url || '')
-	const [seotitle, setSeoTitle] = useState<string>(post?.meta?.title || '')
-	const [seodescription, setSeoDescription] = useState<string>(
-		post?.meta?.description || ''
-	)
+	const [seotitle, setSeoTitle] = useState<string>('')
+	const [seodescription, setSeoDescription] = useState<string>('')
 
 	const [createPost] = useMutation<
 		CreatePostMutation,
@@ -102,11 +100,12 @@ export const PostEditModal: React.FC<Props> = ({
 
 	const execute = async (status: PostStatus) => {
 		if (!content) return
+		console.log('content:', content)
 		console.log('imageId:', heroImage)
 		const input = {
 			...(isEditing ? { id: post.id } : {}),
 			title: form.getValues().title,
-			content: JSON.stringify(content),
+			content,
 			status,
 			authorID: '1',
 			communityID: '1',

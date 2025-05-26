@@ -20,7 +20,11 @@ query GetCommunityById($id: ID!) {
 				url
 			}
 		}
-		tableInfo
+		communityInfo {
+			id
+			key
+			value
+		}
 		posts {
 			id
 			title

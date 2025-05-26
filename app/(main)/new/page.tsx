@@ -42,6 +42,7 @@ export default async function Home() {
 		})
 
 	const posts = postsResult.posts ?? []
+	console.log('posts:', posts)
 	const communities = communitiesResult.communities ?? []
 
 	return (
