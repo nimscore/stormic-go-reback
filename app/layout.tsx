@@ -19,7 +19,7 @@ import {
 	GetHostUserBanByIdQuery,
 	GetStartedLayoutQuery,
 } from '@/graphql/schema/graphql'
-import { apolloClient } from '@/lib/apollo-client'
+import { apolloClient } from '@/lib/apollo-server'
 import { Providers } from '@/providers'
 import { getSession } from '@/utils/auth/get-session'
 import { Metadata } from 'next'
@@ -49,7 +49,7 @@ export default async function RootLayout({
 }) {
 	const counterId = process.env.NEXT_PUBLIC_YANDEX_METRIKA
 	const session = await getSession()
-	const currentUser = session && session.user
+	const currentUser = session && session
 	const apollo = apolloClient()
 
 	const { data: startedLayoutResult, errors: startedLayoutErrors } =

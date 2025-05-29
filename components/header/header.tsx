@@ -6,7 +6,7 @@ import {
 	GetHostQuery,
 	GetHostSidebarNavigationQuery,
 	GetHostSocialNavigationQuery,
-	User,
+	UserResponse,
 } from '@/graphql/schema/graphql'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
@@ -27,7 +27,7 @@ interface Props {
 	socialNavigation: NonNullable<
 		GetHostSocialNavigationQuery['hostSocialNavigation']
 	>
-	currentUser?: User | null
+	currentUser?: UserResponse
 	className?: string
 }
 

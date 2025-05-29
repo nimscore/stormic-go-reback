@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import {
 	GetCommunityByIdQuery,
 	GetHostQuery,
-	User,
+	UserResponse,
 } from '@/graphql/schema/graphql'
 // import { LocaleToggle } from '@/shared/components/ui/locale-toggle'
 import { cn } from '@/lib/utils'
@@ -18,7 +18,7 @@ import { NewPostButton } from '../buttons/new-post-button'
 interface Props {
 	hostSettings: NonNullable<GetHostQuery['host']>
 	communities: NonNullable<GetCommunityByIdQuery['community']>[]
-	currentUser?: User | null
+	currentUser?: UserResponse
 	className?: string
 }
 

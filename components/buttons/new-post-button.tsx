@@ -3,7 +3,7 @@
 import {
 	GetCommunityByIdQuery,
 	GetHostQuery,
-	User,
+	UserResponse,
 } from '@/graphql/schema/graphql'
 import { cn } from '@/lib/utils'
 import React from 'react'
@@ -15,7 +15,7 @@ import { Button } from '../ui/button'
 interface Props {
 	host: NonNullable<GetHostQuery['host']>
 	communities: NonNullable<GetCommunityByIdQuery['community']>[]
-	currentUser?: User | null
+	currentUser?: UserResponse
 	className?: string
 }
 

@@ -13,7 +13,7 @@ import {
 	GetPostsQuery,
 	PostStatus,
 } from '@/graphql/schema/graphql'
-import { apolloClient } from '@/lib/apollo-client'
+import { apolloClient } from '@/lib/apollo-server'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {

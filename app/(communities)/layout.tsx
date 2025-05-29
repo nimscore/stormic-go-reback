@@ -15,7 +15,7 @@ import {
 	GetCommunitiesQuery,
 	GetStartedLayoutQuery,
 } from '@/graphql/schema/graphql'
-import { apolloClient } from '@/lib/apollo-client'
+import { apolloClient } from '@/lib/apollo-server'
 import React from 'react'
 
 export default async function CommunitiesLayout({

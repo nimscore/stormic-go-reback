@@ -2928,94 +2928,41 @@ export type VerifyEmailResponse = {
   message: Scalars['String']['output'];
 };
 
-export type GetCommunitiesQueryVariables = Types.Exact<{
-  onlyNotBanned: Types.Scalars['Boolean']['input'];
-}>;
+export type LogoutUserMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetCommunitiesQuery = { __typename?: 'Query', communities: Array<{ __typename?: 'Community', id: string, title: string, slug: string, contacts?: string | null, description?: string | null, communityHasBanned: boolean, createdAt: any, logo?: { __typename?: 'Media', url?: string | null } | null, banner?: { __typename?: 'Media', url?: string | null } | null, owner: { __typename?: 'User', id: string, name: string, slug: string, description?: string | null, avatar?: { __typename?: 'Media', url?: string | null } | null }, communityInfo?: Array<{ __typename?: 'ProfileTableInfoItem', id: string, key: string, value: string }> | null, posts?: Array<{ __typename?: 'Post', id: string, title: string, slug: string, author: { __typename?: 'User', id: string, name: string, slug: string, avatar?: { __typename?: 'Media', url?: string | null } | null } }> | null, roles?: Array<{ __typename?: 'Role', id: string, title: string }> | null }> };
+export type LogoutUserMutation = { __typename?: 'Mutation', logoutUser: { __typename?: 'LogoutUserResponse', message: string } };
 
 
-export const GetCommunitiesDocument = gql`
-    query GetCommunities($onlyNotBanned: Boolean!) {
-  communities(onlyNotBanned: $onlyNotBanned) {
-    id
-    title
-    slug
-    contacts
-    description
-    logo {
-      url
-    }
-    banner {
-      url
-    }
-    owner {
-      id
-      name
-      slug
-      description
-      avatar {
-        url
-      }
-    }
-    communityInfo {
-      id
-      key
-      value
-    }
-    posts {
-      id
-      title
-      slug
-      author {
-        id
-        name
-        slug
-        avatar {
-          url
-        }
-      }
-    }
-    roles {
-      id
-      title
-    }
-    communityHasBanned
-    createdAt
+export const LogoutUserDocument = gql`
+    mutation LogoutUser {
+  logoutUser {
+    message
   }
 }
     `;
+export type LogoutUserMutationFn = Apollo.MutationFunction<LogoutUserMutation, LogoutUserMutationVariables>;
 
 /**
- * __useGetCommunitiesQuery__
+ * __useLogoutUserMutation__
  *
- * To run a query within a React component, call `useGetCommunitiesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCommunitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
+ * To run a mutation, you first call `useLogoutUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLogoutUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const { data, loading, error } = useGetCommunitiesQuery({
+ * const [logoutUserMutation, { data, loading, error }] = useLogoutUserMutation({
  *   variables: {
- *      onlyNotBanned: // value for 'onlyNotBanned'
  *   },
  * });
  */
-export function useGetCommunitiesQuery(baseOptions: Apollo.QueryHookOptions<GetCommunitiesQuery, GetCommunitiesQueryVariables> & ({ variables: GetCommunitiesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useLogoutUserMutation(baseOptions?: Apollo.MutationHookOptions<LogoutUserMutation, LogoutUserMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetCommunitiesQuery, GetCommunitiesQueryVariables>(GetCommunitiesDocument, options);
+        return Apollo.useMutation<LogoutUserMutation, LogoutUserMutationVariables>(LogoutUserDocument, options);
       }
-export function useGetCommunitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCommunitiesQuery, GetCommunitiesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetCommunitiesQuery, GetCommunitiesQueryVariables>(GetCommunitiesDocument, options);
-        }
-export function useGetCommunitiesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCommunitiesQuery, GetCommunitiesQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetCommunitiesQuery, GetCommunitiesQueryVariables>(GetCommunitiesDocument, options);
-        }
-export type GetCommunitiesQueryHookResult = ReturnType<typeof useGetCommunitiesQuery>;
-export type GetCommunitiesLazyQueryHookResult = ReturnType<typeof useGetCommunitiesLazyQuery>;
-export type GetCommunitiesSuspenseQueryHookResult = ReturnType<typeof useGetCommunitiesSuspenseQuery>;
-export type GetCommunitiesQueryResult = Apollo.QueryResult<GetCommunitiesQuery, GetCommunitiesQueryVariables>;
+export type LogoutUserMutationHookResult = ReturnType<typeof useLogoutUserMutation>;
+export type LogoutUserMutationResult = Apollo.MutationResult<LogoutUserMutation>;
+export type LogoutUserMutationOptions = Apollo.BaseMutationOptions<LogoutUserMutation, LogoutUserMutationVariables>;

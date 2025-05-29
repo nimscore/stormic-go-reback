@@ -20,6 +20,7 @@ export type Scalars = {
   Cursor: { input: any; output: any; }
   JSON: { input: any; output: any; }
   Time: { input: any; output: any; }
+  Upload: { input: any; output: any; }
 };
 
 export type Bookmark = Node & {
@@ -1737,6 +1738,23 @@ export type HostWhereInput = {
   updatedAtNotIn?: InputMaybe<Array<Scalars['Time']['input']>>;
 };
 
+export type LoginUserInput = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
+export type LoginUserResponse = {
+  __typename?: 'LoginUserResponse';
+  accessToken: Scalars['String']['output'];
+  refreshToken: Scalars['String']['output'];
+  user: User;
+};
+
+export type LogoutUserResponse = {
+  __typename?: 'LogoutUserResponse';
+  message: Scalars['String']['output'];
+};
+
 export type Media = Node & {
   __typename?: 'Media';
   alt?: Maybe<Scalars['String']['output']>;
@@ -1853,9 +1871,15 @@ export type Mutation = {
   __typename?: 'Mutation';
   createCommunity: Community;
   createPost: Post;
-  /** Установить firstSettings у конкретного Host (здесь фиксированного, с id=1) */
   host: Host;
+  loginUser: LoginUserResponse;
+  logoutUser: LogoutUserResponse;
   post: Post;
+  registerUser: RegisterUserResponse;
+  resendUserVerifyEmail: ResendVerifyEmailResponse;
+  uploadMedia: Media;
+  userRefreshToken: RefreshTokenResponse;
+  userVerifyEmail: VerifyEmailResponse;
 };
 
 
@@ -1874,8 +1898,34 @@ export type MutationHostArgs = {
 };
 
 
+export type MutationLoginUserArgs = {
+  input: LoginUserInput;
+};
+
+
 export type MutationPostArgs = {
   input: UpdatePostInput;
+};
+
+
+export type MutationRegisterUserArgs = {
+  input: RegisterUserInput;
+};
+
+
+export type MutationResendUserVerifyEmailArgs = {
+  input: ResendVerifyEmailInput;
+};
+
+
+export type MutationUploadMediaArgs = {
+  dir?: InputMaybe<Scalars['String']['input']>;
+  file: Scalars['Upload']['input'];
+};
+
+
+export type MutationUserVerifyEmailArgs = {
+  input: VerifyEmailInput;
 };
 
 /**
@@ -2240,6 +2290,7 @@ export type Query = {
   community?: Maybe<Community>;
   communityUserBan?: Maybe<CommunityUserBan>;
   communityUserMute?: Maybe<CommunityUserMute>;
+  getMe: UserResponse;
   host?: Maybe<Host>;
   hostRole?: Maybe<HostRole>;
   hostRoles: Array<HostRole>;
@@ -2344,6 +2395,32 @@ export type QueryRolesArgs = {
 
 export type QueryUserArgs = {
   id: Scalars['ID']['input'];
+};
+
+export type RefreshTokenResponse = {
+  __typename?: 'RefreshTokenResponse';
+  accessToken: Scalars['String']['output'];
+  refreshToken: Scalars['String']['output'];
+};
+
+export type RegisterUserInput = {
+  email: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
+export type RegisterUserResponse = {
+  __typename?: 'RegisterUserResponse';
+  user: User;
+};
+
+export type ResendVerifyEmailInput = {
+  email: Scalars['String']['input'];
+};
+
+export type ResendVerifyEmailResponse = {
+  __typename?: 'ResendVerifyEmailResponse';
+  message: Scalars['String']['output'];
 };
 
 export type Role = Node & {
@@ -2529,6 +2606,25 @@ export type User = Node & {
   userInfo?: Maybe<Array<ProfileTableInfoItem>>;
 };
 
+export type UserAvatarResponse = {
+  __typename?: 'UserAvatarResponse';
+  id: Scalars['String']['output'];
+  url: Scalars['String']['output'];
+};
+
+export type UserCommunityRoleResponse = {
+  __typename?: 'UserCommunityRoleResponse';
+  color: Scalars['String']['output'];
+  communityDeleteComments: Scalars['Boolean']['output'];
+  communityDeletePost: Scalars['Boolean']['output'];
+  communityRemovePostFromPublication: Scalars['Boolean']['output'];
+  communityRolesManagement: Scalars['Boolean']['output'];
+  communityUserBan: Scalars['Boolean']['output'];
+  communityUserMute: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
+  title: Scalars['String']['output'];
+};
+
 export type UserFollow = Node & {
   __typename?: 'UserFollow';
   createdAt: Scalars['Time']['output'];
@@ -2591,6 +2687,42 @@ export type UserFollowWhereInput = {
   updatedAtLTE?: InputMaybe<Scalars['Time']['input']>;
   updatedAtNEQ?: InputMaybe<Scalars['Time']['input']>;
   updatedAtNotIn?: InputMaybe<Array<Scalars['Time']['input']>>;
+};
+
+export type UserHostRoleResponse = {
+  __typename?: 'UserHostRoleResponse';
+  color: Scalars['String']['output'];
+  communityRolesManagement: Scalars['Boolean']['output'];
+  hostCommunityDeleteComments: Scalars['Boolean']['output'];
+  hostCommunityDeletePost: Scalars['Boolean']['output'];
+  hostCommunityRemovePostFromPublication: Scalars['Boolean']['output'];
+  hostUserBan: Scalars['Boolean']['output'];
+  hostUserMute: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
+  title: Scalars['String']['output'];
+};
+
+export type UserInfoResponse = {
+  __typename?: 'UserInfoResponse';
+  id: Scalars['ID']['output'];
+  key: Scalars['String']['output'];
+  value: Scalars['String']['output'];
+};
+
+export type UserResponse = {
+  __typename?: 'UserResponse';
+  avatar?: Maybe<UserAvatarResponse>;
+  communitiesRoles: Array<UserCommunityRoleResponse>;
+  createdAt: Scalars['String']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  email: Scalars['String']['output'];
+  hostRoles: Array<UserHostRoleResponse>;
+  id: Scalars['ID']['output'];
+  isVerified: Scalars['Boolean']['output'];
+  name: Scalars['String']['output'];
+  slug: Scalars['String']['output'];
+  updatedAt: Scalars['String']['output'];
+  userInfo: Array<UserInfoResponse>;
 };
 
 /**
@@ -2787,12 +2919,21 @@ export type UserWhereInput = {
   updatedAtNotIn?: InputMaybe<Array<Scalars['Time']['input']>>;
 };
 
+export type VerifyEmailInput = {
+  token: Scalars['String']['input'];
+};
+
+export type VerifyEmailResponse = {
+  __typename?: 'VerifyEmailResponse';
+  message: Scalars['String']['output'];
+};
+
 export type GetUserByIdQueryVariables = Types.Exact<{
   id: Types.Scalars['ID']['input'];
 }>;
 
 
-export type GetUserByIdQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, name: string, slug: string, email: string, description?: string | null, createdAt: any, userInfo?: Array<{ __typename?: 'ProfileTableInfoItem', id: string, key: string, value: string }> | null, avatar?: { __typename?: 'Media', url?: string | null } | null, hostRoles?: Array<{ __typename?: 'HostRole', id: string, title: string, color?: string | null, communityRolesManagement: boolean, hostUserBan: boolean, hostUserMute: boolean, hostCommunityDeletePost: boolean, hostCommunityDeleteComments: boolean, hostCommunityRemovePostFromPublication: boolean }> | null, communitiesRoles?: Array<{ __typename?: 'Role', id: string, title: string, color?: string | null, communityRolesManagement: boolean, communityUserBan: boolean, communityUserMute: boolean, communityDeletePost: boolean, communityDeleteComments: boolean, communityRemovePostFromPublication: boolean }> | null } | null };
+export type GetUserByIdQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, name: string, slug: string, email: string, description?: string | null, isVerified: boolean, createdAt: any, updatedAt: any, avatar?: { __typename?: 'Media', id: string, url?: string | null } | null, userInfo?: Array<{ __typename?: 'ProfileTableInfoItem', id: string, key: string, value: string }> | null, hostRoles?: Array<{ __typename?: 'HostRole', id: string, title: string, color?: string | null, communityRolesManagement: boolean, hostUserBan: boolean, hostUserMute: boolean, hostCommunityDeletePost: boolean, hostCommunityDeleteComments: boolean, hostCommunityRemovePostFromPublication: boolean }> | null, communitiesRoles?: Array<{ __typename?: 'Role', id: string, title: string, color?: string | null, communityRolesManagement: boolean, communityUserBan: boolean, communityUserMute: boolean, communityDeletePost: boolean, communityDeleteComments: boolean, communityRemovePostFromPublication: boolean }> | null } | null };
 
 
 export const GetUserByIdDocument = gql`
@@ -2801,15 +2942,16 @@ export const GetUserByIdDocument = gql`
     id
     name
     slug
+    avatar {
+      id
+      url
+    }
     email
     description
     userInfo {
       id
       key
       value
-    }
-    avatar {
-      url
     }
     hostRoles {
       id
@@ -2833,7 +2975,9 @@ export const GetUserByIdDocument = gql`
       communityDeleteComments
       communityRemovePostFromPublication
     }
+    isVerified
     createdAt
+    updatedAt
   }
 }
     `;

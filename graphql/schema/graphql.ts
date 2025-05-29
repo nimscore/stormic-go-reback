@@ -15,6 +15,7 @@ export type Scalars = {
   Cursor: { input: any; output: any; }
   JSON: { input: any; output: any; }
   Time: { input: any; output: any; }
+  Upload: { input: any; output: any; }
 };
 
 export type Bookmark = Node & {
@@ -1732,6 +1733,23 @@ export type HostWhereInput = {
   updatedAtNotIn?: InputMaybe<Array<Scalars['Time']['input']>>;
 };
 
+export type LoginUserInput = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
+export type LoginUserResponse = {
+  __typename?: 'LoginUserResponse';
+  accessToken: Scalars['String']['output'];
+  refreshToken: Scalars['String']['output'];
+  user: User;
+};
+
+export type LogoutUserResponse = {
+  __typename?: 'LogoutUserResponse';
+  message: Scalars['String']['output'];
+};
+
 export type Media = Node & {
   __typename?: 'Media';
   alt?: Maybe<Scalars['String']['output']>;
@@ -1848,9 +1866,15 @@ export type Mutation = {
   __typename?: 'Mutation';
   createCommunity: Community;
   createPost: Post;
-  /** Установить firstSettings у конкретного Host (здесь фиксированного, с id=1) */
   host: Host;
+  loginUser: LoginUserResponse;
+  logoutUser: LogoutUserResponse;
   post: Post;
+  registerUser: RegisterUserResponse;
+  resendUserVerifyEmail: ResendVerifyEmailResponse;
+  uploadMedia: Media;
+  userRefreshToken: RefreshTokenResponse;
+  userVerifyEmail: VerifyEmailResponse;
 };
 
 
@@ -1869,8 +1893,34 @@ export type MutationHostArgs = {
 };
 
 
+export type MutationLoginUserArgs = {
+  input: LoginUserInput;
+};
+
+
 export type MutationPostArgs = {
   input: UpdatePostInput;
+};
+
+
+export type MutationRegisterUserArgs = {
+  input: RegisterUserInput;
+};
+
+
+export type MutationResendUserVerifyEmailArgs = {
+  input: ResendVerifyEmailInput;
+};
+
+
+export type MutationUploadMediaArgs = {
+  dir?: InputMaybe<Scalars['String']['input']>;
+  file: Scalars['Upload']['input'];
+};
+
+
+export type MutationUserVerifyEmailArgs = {
+  input: VerifyEmailInput;
 };
 
 /**
@@ -2235,6 +2285,7 @@ export type Query = {
   community?: Maybe<Community>;
   communityUserBan?: Maybe<CommunityUserBan>;
   communityUserMute?: Maybe<CommunityUserMute>;
+  getMe: UserResponse;
   host?: Maybe<Host>;
   hostRole?: Maybe<HostRole>;
   hostRoles: Array<HostRole>;
@@ -2339,6 +2390,32 @@ export type QueryRolesArgs = {
 
 export type QueryUserArgs = {
   id: Scalars['ID']['input'];
+};
+
+export type RefreshTokenResponse = {
+  __typename?: 'RefreshTokenResponse';
+  accessToken: Scalars['String']['output'];
+  refreshToken: Scalars['String']['output'];
+};
+
+export type RegisterUserInput = {
+  email: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
+export type RegisterUserResponse = {
+  __typename?: 'RegisterUserResponse';
+  user: User;
+};
+
+export type ResendVerifyEmailInput = {
+  email: Scalars['String']['input'];
+};
+
+export type ResendVerifyEmailResponse = {
+  __typename?: 'ResendVerifyEmailResponse';
+  message: Scalars['String']['output'];
 };
 
 export type Role = Node & {
@@ -2524,6 +2601,25 @@ export type User = Node & {
   userInfo?: Maybe<Array<ProfileTableInfoItem>>;
 };
 
+export type UserAvatarResponse = {
+  __typename?: 'UserAvatarResponse';
+  id: Scalars['String']['output'];
+  url: Scalars['String']['output'];
+};
+
+export type UserCommunityRoleResponse = {
+  __typename?: 'UserCommunityRoleResponse';
+  color: Scalars['String']['output'];
+  communityDeleteComments: Scalars['Boolean']['output'];
+  communityDeletePost: Scalars['Boolean']['output'];
+  communityRemovePostFromPublication: Scalars['Boolean']['output'];
+  communityRolesManagement: Scalars['Boolean']['output'];
+  communityUserBan: Scalars['Boolean']['output'];
+  communityUserMute: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
+  title: Scalars['String']['output'];
+};
+
 export type UserFollow = Node & {
   __typename?: 'UserFollow';
   createdAt: Scalars['Time']['output'];
@@ -2586,6 +2682,42 @@ export type UserFollowWhereInput = {
   updatedAtLTE?: InputMaybe<Scalars['Time']['input']>;
   updatedAtNEQ?: InputMaybe<Scalars['Time']['input']>;
   updatedAtNotIn?: InputMaybe<Array<Scalars['Time']['input']>>;
+};
+
+export type UserHostRoleResponse = {
+  __typename?: 'UserHostRoleResponse';
+  color: Scalars['String']['output'];
+  communityRolesManagement: Scalars['Boolean']['output'];
+  hostCommunityDeleteComments: Scalars['Boolean']['output'];
+  hostCommunityDeletePost: Scalars['Boolean']['output'];
+  hostCommunityRemovePostFromPublication: Scalars['Boolean']['output'];
+  hostUserBan: Scalars['Boolean']['output'];
+  hostUserMute: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
+  title: Scalars['String']['output'];
+};
+
+export type UserInfoResponse = {
+  __typename?: 'UserInfoResponse';
+  id: Scalars['ID']['output'];
+  key: Scalars['String']['output'];
+  value: Scalars['String']['output'];
+};
+
+export type UserResponse = {
+  __typename?: 'UserResponse';
+  avatar?: Maybe<UserAvatarResponse>;
+  communitiesRoles: Array<UserCommunityRoleResponse>;
+  createdAt: Scalars['String']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  email: Scalars['String']['output'];
+  hostRoles: Array<UserHostRoleResponse>;
+  id: Scalars['ID']['output'];
+  isVerified: Scalars['Boolean']['output'];
+  name: Scalars['String']['output'];
+  slug: Scalars['String']['output'];
+  updatedAt: Scalars['String']['output'];
+  userInfo: Array<UserInfoResponse>;
 };
 
 /**
@@ -2782,6 +2914,15 @@ export type UserWhereInput = {
   updatedAtNotIn?: InputMaybe<Array<Scalars['Time']['input']>>;
 };
 
+export type VerifyEmailInput = {
+  token: Scalars['String']['input'];
+};
+
+export type VerifyEmailResponse = {
+  __typename?: 'VerifyEmailResponse';
+  message: Scalars['String']['output'];
+};
+
 export type CreateCommunityMutationVariables = Exact<{
   input: CreateCommunityInput;
 }>;
@@ -2795,6 +2936,18 @@ export type CreatePostMutationVariables = Exact<{
 
 
 export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Post', title: string, content: any, heroImageID?: string | null, authorID: string, communityID: string, status: PostStatus, publishedAt?: any | null } };
+
+export type LoginUserMutationVariables = Exact<{
+  input: LoginUserInput;
+}>;
+
+
+export type LoginUserMutation = { __typename?: 'Mutation', loginUser: { __typename?: 'LoginUserResponse', accessToken: string, refreshToken: string, user: { __typename?: 'User', id: string, name: string, email: string, isVerified: boolean } } };
+
+export type LogoutUserMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogoutUserMutation = { __typename?: 'Mutation', logoutUser: { __typename?: 'LogoutUserResponse', message: string } };
 
 export type UpdateHostMutationVariables = Exact<{
   input: UpdateHostInput;
@@ -2851,6 +3004,11 @@ export type GetHostUsersBanQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetHostUsersBanQuery = { __typename?: 'Query', hostUsersBan: Array<{ __typename?: 'HostUserBan', user: { __typename?: 'User', id: string, name: string, slug: string, avatar?: { __typename?: 'Media', id: string, url?: string | null } | null } }> };
 
+export type GetMeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMeQuery = { __typename?: 'Query', getMe: { __typename?: 'UserResponse', id: string, name: string, slug: string, email: string, description?: string | null, isVerified: boolean, createdAt: string, updatedAt: string, avatar?: { __typename?: 'UserAvatarResponse', id: string, url: string } | null, userInfo: Array<{ __typename?: 'UserInfoResponse', id: string, key: string, value: string }>, hostRoles: Array<{ __typename?: 'UserHostRoleResponse', id: string, title: string, color: string, communityRolesManagement: boolean, hostUserBan: boolean, hostUserMute: boolean, hostCommunityDeletePost: boolean, hostCommunityDeleteComments: boolean, hostCommunityRemovePostFromPublication: boolean }>, communitiesRoles: Array<{ __typename?: 'UserCommunityRoleResponse', id: string, title: string, color: string, communityRolesManagement: boolean, communityUserBan: boolean, communityUserMute: boolean, communityDeletePost: boolean, communityDeleteComments: boolean, communityRemovePostFromPublication: boolean }> } };
+
 export type GetMediaByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -2896,7 +3054,7 @@ export type GetUserByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetUserByIdQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, name: string, slug: string, email: string, description?: string | null, createdAt: any, userInfo?: Array<{ __typename?: 'ProfileTableInfoItem', id: string, key: string, value: string }> | null, avatar?: { __typename?: 'Media', url?: string | null } | null, hostRoles?: Array<{ __typename?: 'HostRole', id: string, title: string, color?: string | null, communityRolesManagement: boolean, hostUserBan: boolean, hostUserMute: boolean, hostCommunityDeletePost: boolean, hostCommunityDeleteComments: boolean, hostCommunityRemovePostFromPublication: boolean }> | null, communitiesRoles?: Array<{ __typename?: 'Role', id: string, title: string, color?: string | null, communityRolesManagement: boolean, communityUserBan: boolean, communityUserMute: boolean, communityDeletePost: boolean, communityDeleteComments: boolean, communityRemovePostFromPublication: boolean }> | null } | null };
+export type GetUserByIdQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, name: string, slug: string, email: string, description?: string | null, isVerified: boolean, createdAt: any, updatedAt: any, avatar?: { __typename?: 'Media', id: string, url?: string | null } | null, userInfo?: Array<{ __typename?: 'ProfileTableInfoItem', id: string, key: string, value: string }> | null, hostRoles?: Array<{ __typename?: 'HostRole', id: string, title: string, color?: string | null, communityRolesManagement: boolean, hostUserBan: boolean, hostUserMute: boolean, hostCommunityDeletePost: boolean, hostCommunityDeleteComments: boolean, hostCommunityRemovePostFromPublication: boolean }> | null, communitiesRoles?: Array<{ __typename?: 'Role', id: string, title: string, color?: string | null, communityRolesManagement: boolean, communityUserBan: boolean, communityUserMute: boolean, communityDeletePost: boolean, communityDeleteComments: boolean, communityRemovePostFromPublication: boolean }> | null } | null };
 
 export type GetUserPermissionsQueryVariables = Exact<{
   userId: Scalars['ID']['input'];
@@ -2909,4 +3067,4 @@ export type GetUserPermissionsQuery = { __typename?: 'Query', host?: { __typenam
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, name: string, slug: string, email: string, description?: string | null, createdAt: any, userInfo?: Array<{ __typename?: 'ProfileTableInfoItem', id: string, key: string, value: string }> | null, avatar?: { __typename?: 'Media', id: string, url?: string | null } | null, hostRoles?: Array<{ __typename?: 'HostRole', title: string, color?: string | null }> | null }> };
+export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, name: string, slug: string, email: string, description?: string | null, isVerified: boolean, createdAt: any, updatedAt: any, avatar?: { __typename?: 'Media', id: string, url?: string | null } | null, userInfo?: Array<{ __typename?: 'ProfileTableInfoItem', id: string, key: string, value: string }> | null, hostRoles?: Array<{ __typename?: 'HostRole', id: string, title: string, color?: string | null, communityRolesManagement: boolean, hostUserBan: boolean, hostUserMute: boolean, hostCommunityDeletePost: boolean, hostCommunityDeleteComments: boolean, hostCommunityRemovePostFromPublication: boolean }> | null, communitiesRoles?: Array<{ __typename?: 'Role', id: string, title: string, color?: string | null, communityRolesManagement: boolean, communityUserBan: boolean, communityUserMute: boolean, communityDeletePost: boolean, communityDeleteComments: boolean, communityRemovePostFromPublication: boolean }> | null }> };

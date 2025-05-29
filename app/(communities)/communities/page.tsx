@@ -12,7 +12,7 @@ import {
 	GetCommunitiesQuery,
 	GetStartedLayoutQuery,
 } from '@/graphql/schema/graphql'
-import { apolloClient } from '@/lib/apollo-client'
+import { apolloClient } from '@/lib/apollo-server'
 
 export default async function CommunitiesPage() {
 	const apollo = apolloClient()

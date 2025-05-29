@@ -3,15 +3,16 @@ query GetUserById($id: ID!) {
 		id
 		name
 		slug
+		avatar {
+			id
+			url
+		}
 		email
 		description
 		userInfo {
 			id
 			key
 			value
-		}
-		avatar {
-			url
 		}
 		hostRoles {
 			id
@@ -35,6 +36,8 @@ query GetUserById($id: ID!) {
 			communityDeleteComments
 			communityRemovePostFromPublication
 		}
+		isVerified
 		createdAt
+		updatedAt
 	}
 }

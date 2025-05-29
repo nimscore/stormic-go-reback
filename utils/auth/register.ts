@@ -1,6 +1,3 @@
-import { User } from '@/schema/types'
-import { cookies } from 'next/headers'
-
 export async function registerUser(data: {
 	email: string
 	name: string
@@ -23,16 +20,16 @@ export async function registerUser(data: {
 				cache: 'no-store',
 			}
 		)
-		
+
 		if (!res.ok) {
 			const errorData = await res.json()
 			throw new Error(errorData.error || 'Registration failed')
 		}
-		
+
 		const response = await res.json()
 		// После успешной регистрации выполняем вход
 		// await signIn({ email: data.email, password: data.password })
-		
+
 		return { success: true, message: response.message }
 	} catch (error) {
 		throw error

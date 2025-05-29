@@ -29,7 +29,7 @@ import {
 	GetPostByIdQuery,
 	PostStatus,
 	UpdatePostMutation,
-	User,
+	UserResponse,
 } from '@/graphql/schema/graphql'
 import { useCurrentTime } from '@/hooks/use-current-time'
 import { useIsMobile } from '@/hooks/use-mobile'
@@ -48,7 +48,7 @@ import { formTitleSchema, TFormTitleValues } from './schemas'
 interface Props {
 	post?: GetPostByIdQuery['post']
 	communities: NonNullable<GetCommunityByIdQuery['community']>[]
-	currentUser: User
+	currentUser: UserResponse
 	open: boolean
 	onClose: () => void
 }
@@ -107,9 +107,8 @@ export const PostEditModal: React.FC<Props> = ({
 			title: form.getValues().title,
 			content,
 			status,
-			authorID: '1',
-			communityID: '1',
-			// communityID: selectedCommunityId,
+			authorID: currentUser.id,
+			communityID: selectedCommunityId,
 			heroImageID: heroImage || null,
 			publishedAt:
 				status === PostStatus.Published

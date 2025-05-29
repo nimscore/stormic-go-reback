@@ -1,53 +1,42 @@
-// import Cookies from 'js-cookie'
+import { TFormLoginValues } from '@/components/modals/auth-modal/forms/schemas'
+import {
+	LoginUserDocument,
+	LoginUserMutationVariables,
+} from '@/graphql/mutations/generated/LoginUser.generated'
+import { LoginUserMutation } from '@/graphql/schema/graphql'
+import { apolloClient } from '@/lib/apollo-client'
 
-export async function signIn(data: { email: string; password: string }) {
-	const res = await fetch(
-		`${process.env.NEXT_PUBLIC_SERVER_URL}/v1/users/login`,
-		{
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(data),
-			credentials: 'include',
-		}
-	)
-	if (!res.ok) {
-		const errorData = await res.json()
-		throw new Error(errorData.error || 'Login failed')
+interface LoginResponse {
+	accessToken: string
+	refreshToken: string
+	user: {
+		id: string
 	}
-	return { success: true }
 }
 
-// export async function signIn(data: { email: string; password: string }) {
-// 	try {
-// 		const res = await fetch(
-// 			`${process.env.NEXT_PUBLIC_SERVER_URL}/v1/users/login`,
-// 			{
-// 				method: 'POST',
-// 				headers: {
-// 					'Content-Type': 'application/json',
-// 				},
-// 				body: JSON.stringify(data),
-// 				cache: 'no-store',
-// 			}
-// 		)
+export async function signIn(data: TFormLoginValues): Promise<LoginResponse> {
+	const apollo = apolloClient()
 
-// 		if (!res.ok) {
-// 			const errorData = await res.json()
-// 			throw new Error(errorData.error || 'Login failed')
-// 		}
+	try {
+		const { data: response, errors } = await apollo.mutate<
+			LoginUserMutation,
+			LoginUserMutationVariables
+		>({
+			mutation: LoginUserDocument,
+			variables: {
+				input: {
+					email: data.email,
+					password: data.password,
+				},
+			},
+		})
 
-// 		const result = await res.json()
-// 		const token = result.accessToken
+		if (errors || !response?.loginUser) {
+			throw new Error(errors?.[0]?.message || 'Login failed')
+		}
 
-// 		// Сохраняем токен в cookie
-// 		Cookies.set('auth-token', token, {
-// 			expires: 7, // 7 дней
-// 			secure: process.env.NODE_ENV === 'production',
-// 			sameSite: 'Lax',
-// 		})
-
-// 		return { success: true }
-// 	} catch (error) {
-// 		throw error
-// 	}
-// }
+		return response.loginUser
+	} catch (error: any) {
+		throw new Error(error.message || 'Failed to sign in')
+	}
+}

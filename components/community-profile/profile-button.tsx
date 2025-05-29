@@ -8,7 +8,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { User } from '@/schema/types'
+import { UserResponse } from '@/graphql/schema/graphql'
 import { signOut } from '@/utils/auth/sign-out'
 import { CircleUser, LogIn } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -16,7 +16,7 @@ import React, { useCallback, useState } from 'react'
 import { toast } from 'sonner'
 
 interface Props {
-	currentUser?: User
+	currentUser?: UserResponse
 	onClickSignIn: () => void
 	className?: string
 }
@@ -28,18 +28,16 @@ export const ProfileButton: React.FC<Props> = ({
 }) => {
 	const router = useRouter()
 	const [dropdownKey, setDropdownKey] = useState(Date.now()) // Уникальный ключ для DropdownMenu
-	
+
 	const handleSignOut = useCallback(async () => {
 		try {
-			const result = await signOut()
-			console.log('✅ [signOut] Response:', result)
-			toast.success(result.message || 'Вы успешно вышли из аккаунта!', {
+			await signOut()
+			toast.success('✅ Вы успешно вышли из аккаунта!', {
 				duration: 3000,
 			})
 			router.refresh()
 		} catch (error: any) {
-			console.error('❌ [signOut] Error:', error)
-			toast.error('Ошибка при выходе из аккаунта!', {
+			toast.error('❌ Ошибка при выходе из аккаунта!', {
 				duration: 3000,
 			})
 		}

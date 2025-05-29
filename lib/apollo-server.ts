@@ -1,12 +1,14 @@
-'use client'
-
 import { ApolloClient, HttpLink, InMemoryCache, from } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import fetch from 'cross-fetch'
-import Cookies from 'js-cookie'
+import { cookies } from 'next/headers'
 
-const authLink = setContext((_, { headers }) => {
-	const token = Cookies.get('auth_token')
+const authLink = setContext(async (_, { headers }) => {
+	const cookieStore = await cookies()
+	const token = cookieStore.get('auth_token')?.value
+	if (!token) {
+		return null
+	}
 	return {
 		headers: {
 			...headers,

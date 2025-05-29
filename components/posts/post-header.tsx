@@ -10,7 +10,7 @@ import {
 	GetPostByIdQuery,
 	PostStatus,
 	UpdatePostMutation,
-	User,
+	UserResponse,
 } from '@/graphql/schema/graphql'
 import { formatDateTime } from '@/lib/format-date-time'
 import { cn } from '@/lib/utils'
@@ -34,7 +34,7 @@ export interface Props {
 	post: NonNullable<GetPostByIdQuery['post']>
 	communities: NonNullable<GetCommunityByIdQuery['community']>[]
 	roleIconMap?: ('hostOwner' | 'communityOwner')[]
-	currentUser?: User | null
+	currentUser?: UserResponse
 	className?: string
 }
 

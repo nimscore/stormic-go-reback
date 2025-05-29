@@ -2928,94 +2928,86 @@ export type VerifyEmailResponse = {
   message: Scalars['String']['output'];
 };
 
-export type GetCommunitiesQueryVariables = Types.Exact<{
-  onlyNotBanned: Types.Scalars['Boolean']['input'];
-}>;
+export type GetMeQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetCommunitiesQuery = { __typename?: 'Query', communities: Array<{ __typename?: 'Community', id: string, title: string, slug: string, contacts?: string | null, description?: string | null, communityHasBanned: boolean, createdAt: any, logo?: { __typename?: 'Media', url?: string | null } | null, banner?: { __typename?: 'Media', url?: string | null } | null, owner: { __typename?: 'User', id: string, name: string, slug: string, description?: string | null, avatar?: { __typename?: 'Media', url?: string | null } | null }, communityInfo?: Array<{ __typename?: 'ProfileTableInfoItem', id: string, key: string, value: string }> | null, posts?: Array<{ __typename?: 'Post', id: string, title: string, slug: string, author: { __typename?: 'User', id: string, name: string, slug: string, avatar?: { __typename?: 'Media', url?: string | null } | null } }> | null, roles?: Array<{ __typename?: 'Role', id: string, title: string }> | null }> };
+export type GetMeQuery = { __typename?: 'Query', getMe: { __typename?: 'UserResponse', id: string, name: string, slug: string, email: string, description?: string | null, isVerified: boolean, createdAt: string, updatedAt: string, avatar?: { __typename?: 'UserAvatarResponse', id: string, url: string } | null, userInfo: Array<{ __typename?: 'UserInfoResponse', id: string, key: string, value: string }>, hostRoles: Array<{ __typename?: 'UserHostRoleResponse', id: string, title: string, color: string, communityRolesManagement: boolean, hostUserBan: boolean, hostUserMute: boolean, hostCommunityDeletePost: boolean, hostCommunityDeleteComments: boolean, hostCommunityRemovePostFromPublication: boolean }>, communitiesRoles: Array<{ __typename?: 'UserCommunityRoleResponse', id: string, title: string, color: string, communityRolesManagement: boolean, communityUserBan: boolean, communityUserMute: boolean, communityDeletePost: boolean, communityDeleteComments: boolean, communityRemovePostFromPublication: boolean }> } };
 
 
-export const GetCommunitiesDocument = gql`
-    query GetCommunities($onlyNotBanned: Boolean!) {
-  communities(onlyNotBanned: $onlyNotBanned) {
+export const GetMeDocument = gql`
+    query GetMe {
+  getMe {
     id
-    title
+    name
     slug
-    contacts
-    description
-    logo {
-      url
-    }
-    banner {
-      url
-    }
-    owner {
+    avatar {
       id
-      name
-      slug
-      description
-      avatar {
-        url
-      }
+      url
     }
-    communityInfo {
+    email
+    description
+    userInfo {
       id
       key
       value
     }
-    posts {
+    hostRoles {
       id
       title
-      slug
-      author {
-        id
-        name
-        slug
-        avatar {
-          url
-        }
-      }
+      color
+      communityRolesManagement
+      hostUserBan
+      hostUserMute
+      hostCommunityDeletePost
+      hostCommunityDeleteComments
+      hostCommunityRemovePostFromPublication
     }
-    roles {
+    communitiesRoles {
       id
       title
+      color
+      communityRolesManagement
+      communityUserBan
+      communityUserMute
+      communityDeletePost
+      communityDeleteComments
+      communityRemovePostFromPublication
     }
-    communityHasBanned
+    isVerified
     createdAt
+    updatedAt
   }
 }
     `;
 
 /**
- * __useGetCommunitiesQuery__
+ * __useGetMeQuery__
  *
- * To run a query within a React component, call `useGetCommunitiesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCommunitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetCommunitiesQuery({
+ * const { data, loading, error } = useGetMeQuery({
  *   variables: {
- *      onlyNotBanned: // value for 'onlyNotBanned'
  *   },
  * });
  */
-export function useGetCommunitiesQuery(baseOptions: Apollo.QueryHookOptions<GetCommunitiesQuery, GetCommunitiesQueryVariables> & ({ variables: GetCommunitiesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useGetMeQuery(baseOptions?: Apollo.QueryHookOptions<GetMeQuery, GetMeQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetCommunitiesQuery, GetCommunitiesQueryVariables>(GetCommunitiesDocument, options);
+        return Apollo.useQuery<GetMeQuery, GetMeQueryVariables>(GetMeDocument, options);
       }
-export function useGetCommunitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCommunitiesQuery, GetCommunitiesQueryVariables>) {
+export function useGetMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMeQuery, GetMeQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetCommunitiesQuery, GetCommunitiesQueryVariables>(GetCommunitiesDocument, options);
+          return Apollo.useLazyQuery<GetMeQuery, GetMeQueryVariables>(GetMeDocument, options);
         }
-export function useGetCommunitiesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCommunitiesQuery, GetCommunitiesQueryVariables>) {
+export function useGetMeSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetMeQuery, GetMeQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetCommunitiesQuery, GetCommunitiesQueryVariables>(GetCommunitiesDocument, options);
+          return Apollo.useSuspenseQuery<GetMeQuery, GetMeQueryVariables>(GetMeDocument, options);
         }
-export type GetCommunitiesQueryHookResult = ReturnType<typeof useGetCommunitiesQuery>;
-export type GetCommunitiesLazyQueryHookResult = ReturnType<typeof useGetCommunitiesLazyQuery>;
-export type GetCommunitiesSuspenseQueryHookResult = ReturnType<typeof useGetCommunitiesSuspenseQuery>;
-export type GetCommunitiesQueryResult = Apollo.QueryResult<GetCommunitiesQuery, GetCommunitiesQueryVariables>;
+export type GetMeQueryHookResult = ReturnType<typeof useGetMeQuery>;
+export type GetMeLazyQueryHookResult = ReturnType<typeof useGetMeLazyQuery>;
+export type GetMeSuspenseQueryHookResult = ReturnType<typeof useGetMeSuspenseQuery>;
+export type GetMeQueryResult = Apollo.QueryResult<GetMeQuery, GetMeQueryVariables>;

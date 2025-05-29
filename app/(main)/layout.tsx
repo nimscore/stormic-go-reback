@@ -16,7 +16,7 @@ import {
 	GetCommunitiesQuery,
 	GetStartedLayoutQuery,
 } from '@/graphql/schema/graphql'
-import { apolloClient } from '@/lib/apollo-client'
+import { apolloClient } from '@/lib/apollo-server'
 import type { Metadata } from 'next'
 import React from 'react'
 
