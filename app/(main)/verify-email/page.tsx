@@ -1,5 +1,6 @@
 'use client'
 
+import { verifyEmail } from '@/utils/auth/verify-email'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
@@ -13,36 +14,25 @@ export default function VerifyEmailPage() {
 	useEffect(() => {
 		if (!token) {
 			setError('Токен отсутствует')
+			toast.error('Токен верификации отсутствует', { duration: 3000 })
 			return
 		}
 
-		const verifyEmail = async () => {
+		const verify = async () => {
 			try {
-				const res = await fetch(
-					`${process.env.NEXT_PUBLIC_SERVER_URL}/v1/auth/verify-email?token=${token}`,
-					{
-						method: 'GET',
-						cache: 'no-store',
-						credentials: 'include',
-					}
-				)
-
-				if (!res.ok) {
-					const errorData = await res.json()
-					throw new Error(errorData.message || 'Ошибка верификации')
-				}
-
-				const data = await res.json()
-				toast.success('Почта успешно подтверждена!', {
+				const result = await verifyEmail(token)
+				toast.success(result.message || 'Почта успешно подтверждена!', {
 					duration: 3000,
 				})
 				router.push('/')
 			} catch (err: any) {
-				setError(err.message || 'Не удалось подтвердить почту')
+				const errorMessage = err.message || 'Не удалось подтвердить почту'
+				setError(errorMessage)
+				toast.error(errorMessage, { duration: 3000 })
 			}
 		}
 
-		verifyEmail()
+		verify()
 	}, [token, router])
 
 	if (error) {

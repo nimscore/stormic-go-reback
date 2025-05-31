@@ -3,7 +3,7 @@
 import { FormInput } from '@/components/form'
 import { Title } from '@/components/misc/title'
 import { Button } from '@/components/ui/button'
-import { registerUser } from '@/utils/auth/register'
+import { registerUser } from '@/utils/auth/register-user'
 import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useCallback } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -36,7 +36,7 @@ export const RegisterForm: React.FC<Props> = ({
 			confirmPassword: '',
 		},
 	})
-	
+
 	const onSubmit = useCallback(
 		async (data: TFormRegisterValues) => {
 			try {

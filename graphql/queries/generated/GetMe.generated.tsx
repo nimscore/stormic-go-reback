@@ -1747,7 +1747,7 @@ export type LoginUserResponse = {
   __typename?: 'LoginUserResponse';
   accessToken: Scalars['String']['output'];
   refreshToken: Scalars['String']['output'];
-  user: User;
+  user: UserResponse;
 };
 
 export type LogoutUserResponse = {
@@ -2411,7 +2411,7 @@ export type RegisterUserInput = {
 
 export type RegisterUserResponse = {
   __typename?: 'RegisterUserResponse';
-  user: User;
+  message: Scalars['String']['output'];
 };
 
 export type ResendVerifyEmailInput = {
@@ -2714,7 +2714,7 @@ export type UserResponse = {
   avatar?: Maybe<UserAvatarResponse>;
   communitiesRoles: Array<UserCommunityRoleResponse>;
   createdAt: Scalars['String']['output'];
-  description?: Maybe<Scalars['String']['output']>;
+  description: Scalars['String']['output'];
   email: Scalars['String']['output'];
   hostRoles: Array<UserHostRoleResponse>;
   id: Scalars['ID']['output'];
@@ -2931,7 +2931,7 @@ export type VerifyEmailResponse = {
 export type GetMeQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetMeQuery = { __typename?: 'Query', getMe: { __typename?: 'UserResponse', id: string, name: string, slug: string, email: string, description?: string | null, isVerified: boolean, createdAt: string, updatedAt: string, avatar?: { __typename?: 'UserAvatarResponse', id: string, url: string } | null, userInfo: Array<{ __typename?: 'UserInfoResponse', id: string, key: string, value: string }>, hostRoles: Array<{ __typename?: 'UserHostRoleResponse', id: string, title: string, color: string, communityRolesManagement: boolean, hostUserBan: boolean, hostUserMute: boolean, hostCommunityDeletePost: boolean, hostCommunityDeleteComments: boolean, hostCommunityRemovePostFromPublication: boolean }>, communitiesRoles: Array<{ __typename?: 'UserCommunityRoleResponse', id: string, title: string, color: string, communityRolesManagement: boolean, communityUserBan: boolean, communityUserMute: boolean, communityDeletePost: boolean, communityDeleteComments: boolean, communityRemovePostFromPublication: boolean }> } };
+export type GetMeQuery = { __typename?: 'Query', getMe: { __typename?: 'UserResponse', id: string, name: string, slug: string, email: string, description: string, isVerified: boolean, createdAt: string, updatedAt: string, avatar?: { __typename?: 'UserAvatarResponse', id: string, url: string } | null, userInfo: Array<{ __typename?: 'UserInfoResponse', id: string, key: string, value: string }>, hostRoles: Array<{ __typename?: 'UserHostRoleResponse', id: string, title: string, color: string, communityRolesManagement: boolean, hostUserBan: boolean, hostUserMute: boolean, hostCommunityDeletePost: boolean, hostCommunityDeleteComments: boolean, hostCommunityRemovePostFromPublication: boolean }>, communitiesRoles: Array<{ __typename?: 'UserCommunityRoleResponse', id: string, title: string, color: string, communityRolesManagement: boolean, communityUserBan: boolean, communityUserMute: boolean, communityDeletePost: boolean, communityDeleteComments: boolean, communityRemovePostFromPublication: boolean }> } };
 
 
 export const GetMeDocument = gql`

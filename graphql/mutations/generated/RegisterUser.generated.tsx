@@ -2928,59 +2928,44 @@ export type VerifyEmailResponse = {
   message: Scalars['String']['output'];
 };
 
-export type GetHostUserBanByIdQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+export type RegisterUserMutationVariables = Types.Exact<{
+  input: Types.RegisterUserInput;
 }>;
 
 
-export type GetHostUserBanByIdQuery = { __typename?: 'Query', hostUserBan?: { __typename?: 'HostUserBan', user: { __typename?: 'User', id: string, name: string, slug: string, avatar?: { __typename?: 'Media', id: string, url?: string | null } | null } } | null };
+export type RegisterUserMutation = { __typename?: 'Mutation', registerUser: { __typename?: 'RegisterUserResponse', message: string } };
 
 
-export const GetHostUserBanByIdDocument = gql`
-    query GetHostUserBanById($id: ID!) {
-  hostUserBan(id: $id) {
-    user {
-      id
-      name
-      slug
-      avatar {
-        id
-        url
-      }
-    }
+export const RegisterUserDocument = gql`
+    mutation RegisterUser($input: RegisterUserInput!) {
+  registerUser(input: $input) {
+    message
   }
 }
     `;
+export type RegisterUserMutationFn = Apollo.MutationFunction<RegisterUserMutation, RegisterUserMutationVariables>;
 
 /**
- * __useGetHostUserBanByIdQuery__
+ * __useRegisterUserMutation__
  *
- * To run a query within a React component, call `useGetHostUserBanByIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetHostUserBanByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
+ * To run a mutation, you first call `useRegisterUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRegisterUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const { data, loading, error } = useGetHostUserBanByIdQuery({
+ * const [registerUserMutation, { data, loading, error }] = useRegisterUserMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      input: // value for 'input'
  *   },
  * });
  */
-export function useGetHostUserBanByIdQuery(baseOptions: Apollo.QueryHookOptions<GetHostUserBanByIdQuery, GetHostUserBanByIdQueryVariables> & ({ variables: GetHostUserBanByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useRegisterUserMutation(baseOptions?: Apollo.MutationHookOptions<RegisterUserMutation, RegisterUserMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetHostUserBanByIdQuery, GetHostUserBanByIdQueryVariables>(GetHostUserBanByIdDocument, options);
+        return Apollo.useMutation<RegisterUserMutation, RegisterUserMutationVariables>(RegisterUserDocument, options);
       }
-export function useGetHostUserBanByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetHostUserBanByIdQuery, GetHostUserBanByIdQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetHostUserBanByIdQuery, GetHostUserBanByIdQueryVariables>(GetHostUserBanByIdDocument, options);
-        }
-export function useGetHostUserBanByIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetHostUserBanByIdQuery, GetHostUserBanByIdQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetHostUserBanByIdQuery, GetHostUserBanByIdQueryVariables>(GetHostUserBanByIdDocument, options);
-        }
-export type GetHostUserBanByIdQueryHookResult = ReturnType<typeof useGetHostUserBanByIdQuery>;
-export type GetHostUserBanByIdLazyQueryHookResult = ReturnType<typeof useGetHostUserBanByIdLazyQuery>;
-export type GetHostUserBanByIdSuspenseQueryHookResult = ReturnType<typeof useGetHostUserBanByIdSuspenseQuery>;
-export type GetHostUserBanByIdQueryResult = Apollo.QueryResult<GetHostUserBanByIdQuery, GetHostUserBanByIdQueryVariables>;
+export type RegisterUserMutationHookResult = ReturnType<typeof useRegisterUserMutation>;
+export type RegisterUserMutationResult = Apollo.MutationResult<RegisterUserMutation>;
+export type RegisterUserMutationOptions = Apollo.BaseMutationOptions<RegisterUserMutation, RegisterUserMutationVariables>;

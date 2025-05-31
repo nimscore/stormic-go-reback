@@ -1747,7 +1747,7 @@ export type LoginUserResponse = {
   __typename?: 'LoginUserResponse';
   accessToken: Scalars['String']['output'];
   refreshToken: Scalars['String']['output'];
-  user: User;
+  user: UserResponse;
 };
 
 export type LogoutUserResponse = {
@@ -2411,7 +2411,7 @@ export type RegisterUserInput = {
 
 export type RegisterUserResponse = {
   __typename?: 'RegisterUserResponse';
-  user: User;
+  message: Scalars['String']['output'];
 };
 
 export type ResendVerifyEmailInput = {
@@ -2714,7 +2714,7 @@ export type UserResponse = {
   avatar?: Maybe<UserAvatarResponse>;
   communitiesRoles: Array<UserCommunityRoleResponse>;
   createdAt: Scalars['String']['output'];
-  description?: Maybe<Scalars['String']['output']>;
+  description: Scalars['String']['output'];
   email: Scalars['String']['output'];
   hostRoles: Array<UserHostRoleResponse>;
   id: Scalars['ID']['output'];

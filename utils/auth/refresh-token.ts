@@ -1,21 +1,47 @@
+'use client'
+
+import {
+	UserRefreshTokenDocument,
+	UserRefreshTokenMutationVariables,
+} from '@/graphql/mutations/generated/UserRefreshToken.generated'
+import { UserRefreshTokenMutation } from '@/graphql/schema/graphql'
+import { apolloClient } from '@/lib/apollo-client'
 import Cookies from 'js-cookie'
 
 export async function refreshToken(): Promise<boolean> {
+	const apollo = apolloClient()
+
 	try {
-		const accessToken = Cookies.get('auth_token')
-		if (!accessToken) throw new Error('No auth token')
-		const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/v1/users/refresh-token`, {
-			method: 'POST',
-			credentials: 'include',
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-			},
+		const { data: response, errors } = await apollo.mutate<
+			UserRefreshTokenMutation,
+			UserRefreshTokenMutationVariables
+		>({
+			mutation: UserRefreshTokenDocument,
+			// variables: {
+			// 	input: {
+			// 		email: data.email,
+			// 		password: data.password,
+			// 	},
+			// },
 		})
-		
-		if (!res.ok) {
-			console.log(`⚠️ [refreshToken] Failed: ${res.status}`)
+
+		if (errors || !response?.userRefreshToken) {
+			console.log(`⚠️ [refreshToken] GraphQL errors: ${JSON.stringify(errors)}`)
 			throw new Error('Token refresh failed')
 		}
+
+		// Сохраняем новые токены в cookies
+		Cookies.set('auth_token', response.userRefreshToken.accessToken, {
+			expires: 1 / 24, // 1 час
+			secure: process.env.NODE_ENV === 'production',
+			sameSite: 'strict',
+		})
+		Cookies.set('refresh_token', response.userRefreshToken.refreshToken, {
+			expires: 7, // 7 дней
+			secure: process.env.NODE_ENV === 'production',
+			sameSite: 'strict',
+		})
+
 		console.log('✅ [refreshToken] Token refreshed successfully')
 		return true
 	} catch (err) {

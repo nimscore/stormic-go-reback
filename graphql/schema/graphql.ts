@@ -1742,7 +1742,7 @@ export type LoginUserResponse = {
   __typename?: 'LoginUserResponse';
   accessToken: Scalars['String']['output'];
   refreshToken: Scalars['String']['output'];
-  user: User;
+  user: UserResponse;
 };
 
 export type LogoutUserResponse = {
@@ -2406,7 +2406,7 @@ export type RegisterUserInput = {
 
 export type RegisterUserResponse = {
   __typename?: 'RegisterUserResponse';
-  user: User;
+  message: Scalars['String']['output'];
 };
 
 export type ResendVerifyEmailInput = {
@@ -2709,7 +2709,7 @@ export type UserResponse = {
   avatar?: Maybe<UserAvatarResponse>;
   communitiesRoles: Array<UserCommunityRoleResponse>;
   createdAt: Scalars['String']['output'];
-  description?: Maybe<Scalars['String']['output']>;
+  description: Scalars['String']['output'];
   email: Scalars['String']['output'];
   hostRoles: Array<UserHostRoleResponse>;
   id: Scalars['ID']['output'];
@@ -2942,12 +2942,19 @@ export type LoginUserMutationVariables = Exact<{
 }>;
 
 
-export type LoginUserMutation = { __typename?: 'Mutation', loginUser: { __typename?: 'LoginUserResponse', accessToken: string, refreshToken: string, user: { __typename?: 'User', id: string, name: string, email: string, isVerified: boolean } } };
+export type LoginUserMutation = { __typename?: 'Mutation', loginUser: { __typename?: 'LoginUserResponse', accessToken: string, refreshToken: string, user: { __typename?: 'UserResponse', id: string, name: string, email: string, isVerified: boolean } } };
 
 export type LogoutUserMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type LogoutUserMutation = { __typename?: 'Mutation', logoutUser: { __typename?: 'LogoutUserResponse', message: string } };
+
+export type RegisterUserMutationVariables = Exact<{
+  input: RegisterUserInput;
+}>;
+
+
+export type RegisterUserMutation = { __typename?: 'Mutation', registerUser: { __typename?: 'RegisterUserResponse', message: string } };
 
 export type UpdateHostMutationVariables = Exact<{
   input: UpdateHostInput;
@@ -2962,6 +2969,18 @@ export type UpdatePostMutationVariables = Exact<{
 
 
 export type UpdatePostMutation = { __typename?: 'Mutation', post: { __typename?: 'Post', id: string, title: string, content: any, status: PostStatus, publishedAt?: any | null } };
+
+export type UserRefreshTokenMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserRefreshTokenMutation = { __typename?: 'Mutation', userRefreshToken: { __typename?: 'RefreshTokenResponse', accessToken: string, refreshToken: string } };
+
+export type UserVerifyEmailMutationVariables = Exact<{
+  input: VerifyEmailInput;
+}>;
+
+
+export type UserVerifyEmailMutation = { __typename?: 'Mutation', userVerifyEmail: { __typename?: 'VerifyEmailResponse', message: string } };
 
 export type GetCommunitiesQueryVariables = Exact<{
   onlyNotBanned: Scalars['Boolean']['input'];
@@ -3007,7 +3026,7 @@ export type GetHostUsersBanQuery = { __typename?: 'Query', hostUsersBan: Array<{
 export type GetMeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMeQuery = { __typename?: 'Query', getMe: { __typename?: 'UserResponse', id: string, name: string, slug: string, email: string, description?: string | null, isVerified: boolean, createdAt: string, updatedAt: string, avatar?: { __typename?: 'UserAvatarResponse', id: string, url: string } | null, userInfo: Array<{ __typename?: 'UserInfoResponse', id: string, key: string, value: string }>, hostRoles: Array<{ __typename?: 'UserHostRoleResponse', id: string, title: string, color: string, communityRolesManagement: boolean, hostUserBan: boolean, hostUserMute: boolean, hostCommunityDeletePost: boolean, hostCommunityDeleteComments: boolean, hostCommunityRemovePostFromPublication: boolean }>, communitiesRoles: Array<{ __typename?: 'UserCommunityRoleResponse', id: string, title: string, color: string, communityRolesManagement: boolean, communityUserBan: boolean, communityUserMute: boolean, communityDeletePost: boolean, communityDeleteComments: boolean, communityRemovePostFromPublication: boolean }> } };
+export type GetMeQuery = { __typename?: 'Query', getMe: { __typename?: 'UserResponse', id: string, name: string, slug: string, email: string, description: string, isVerified: boolean, createdAt: string, updatedAt: string, avatar?: { __typename?: 'UserAvatarResponse', id: string, url: string } | null, userInfo: Array<{ __typename?: 'UserInfoResponse', id: string, key: string, value: string }>, hostRoles: Array<{ __typename?: 'UserHostRoleResponse', id: string, title: string, color: string, communityRolesManagement: boolean, hostUserBan: boolean, hostUserMute: boolean, hostCommunityDeletePost: boolean, hostCommunityDeleteComments: boolean, hostCommunityRemovePostFromPublication: boolean }>, communitiesRoles: Array<{ __typename?: 'UserCommunityRoleResponse', id: string, title: string, color: string, communityRolesManagement: boolean, communityUserBan: boolean, communityUserMute: boolean, communityDeletePost: boolean, communityDeleteComments: boolean, communityRemovePostFromPublication: boolean }> } };
 
 export type GetMediaByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
