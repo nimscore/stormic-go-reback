@@ -37,6 +37,8 @@ export function SelectCommunity({
 	// Находим выбранное сообщество по ID
 	const selectedCommunity = communities.find(c => c.id === selectedCommunityId)
 
+	console.log('Communities:', communities)
+
 	return (
 		<SidebarHeader className='mt-2'>
 			<SidebarMenu className='p-0 m-0 bg-transparent'>

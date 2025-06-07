@@ -1,0 +1,7 @@
+mutation UploadMedia($file: Upload!, $dir: String) {
+	uploadMedia(file: $file, dir: $dir) {
+		id
+		url
+		filename
+	}
+}

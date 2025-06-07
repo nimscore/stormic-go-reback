@@ -1,11 +1,11 @@
 'use client'
 
-import { ImageUploader } from '@/utils/media/ImageUploader'
+import { ImageUploader } from '@/utils/media/Image-uploader'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
 interface Media {
-	id?: number
+	id?: string
 	url: string
 }
 
@@ -25,8 +25,7 @@ export default function UploadPage() {
 				{isUploading && <p className='mt-4'>Загрузка...</p>}
 				{commentImage && (
 					<div className='mt-4'>
-						<p>Загруженное изображение:</p>
-						<p>{commentImage.id}</p>
+						<p>Загруженное изображение, ID: {commentImage.id}</p>
 						<img
 							src={commentImage.url}
 							alt='Uploaded'

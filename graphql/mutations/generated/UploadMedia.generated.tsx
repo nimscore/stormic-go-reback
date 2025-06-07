@@ -1,3 +1,7 @@
+import * as Types from '../../schema/graphql';
+
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -5,6 +9,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -2923,175 +2928,48 @@ export type VerifyEmailResponse = {
   message: Scalars['String']['output'];
 };
 
-export type CreateCommunityMutationVariables = Exact<{
-  input: CreateCommunityInput;
-}>;
-
-
-export type CreateCommunityMutation = { __typename?: 'Mutation', createCommunity: { __typename?: 'Community', title: string, slug: string, description?: string | null, ownerID: string } };
-
-export type CreatePostMutationVariables = Exact<{
-  input: CreatePostInput;
-}>;
-
-
-export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Post', title: string, content: any, heroImageID?: string | null, authorID: string, communityID: string, status: PostStatus, publishedAt?: any | null } };
-
-export type LoginUserMutationVariables = Exact<{
-  input: LoginUserInput;
-}>;
-
-
-export type LoginUserMutation = { __typename?: 'Mutation', loginUser: { __typename?: 'LoginUserResponse', accessToken: string, refreshToken: string, user: { __typename?: 'UserResponse', id: string, name: string, email: string, isVerified: boolean } } };
-
-export type LogoutUserMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type LogoutUserMutation = { __typename?: 'Mutation', logoutUser: { __typename?: 'LogoutUserResponse', message: string } };
-
-export type RegisterUserMutationVariables = Exact<{
-  input: RegisterUserInput;
-}>;
-
-
-export type RegisterUserMutation = { __typename?: 'Mutation', registerUser: { __typename?: 'RegisterUserResponse', message: string } };
-
-export type UpdateHostMutationVariables = Exact<{
-  input: UpdateHostInput;
-}>;
-
-
-export type UpdateHostMutation = { __typename?: 'Mutation', host: { __typename?: 'Host', title?: string | null, slogan?: string | null, contacts?: string | null, description?: string | null, firstSettings: boolean } };
-
-export type UpdatePostMutationVariables = Exact<{
-  input: UpdatePostInput;
-}>;
-
-
-export type UpdatePostMutation = { __typename?: 'Mutation', post: { __typename?: 'Post', id: string, title: string, content: any, status: PostStatus, publishedAt?: any | null } };
-
-export type UploadMediaMutationVariables = Exact<{
-  file: Scalars['Upload']['input'];
-  dir?: InputMaybe<Scalars['String']['input']>;
+export type UploadMediaMutationVariables = Types.Exact<{
+  file: Types.Scalars['Upload']['input'];
+  dir?: Types.InputMaybe<Types.Scalars['String']['input']>;
 }>;
 
 
 export type UploadMediaMutation = { __typename?: 'Mutation', uploadMedia: { __typename?: 'Media', id: string, url?: string | null, filename?: string | null } };
 
-export type UserRefreshTokenMutationVariables = Exact<{ [key: string]: never; }>;
 
+export const UploadMediaDocument = gql`
+    mutation UploadMedia($file: Upload!, $dir: String) {
+  uploadMedia(file: $file, dir: $dir) {
+    id
+    url
+    filename
+  }
+}
+    `;
+export type UploadMediaMutationFn = Apollo.MutationFunction<UploadMediaMutation, UploadMediaMutationVariables>;
 
-export type UserRefreshTokenMutation = { __typename?: 'Mutation', userRefreshToken: { __typename?: 'RefreshTokenResponse', accessToken: string, refreshToken: string } };
-
-export type UserVerifyEmailMutationVariables = Exact<{
-  input: VerifyEmailInput;
-}>;
-
-
-export type UserVerifyEmailMutation = { __typename?: 'Mutation', userVerifyEmail: { __typename?: 'VerifyEmailResponse', message: string } };
-
-export type GetCommunitiesQueryVariables = Exact<{
-  onlyNotBanned: Scalars['Boolean']['input'];
-}>;
-
-
-export type GetCommunitiesQuery = { __typename?: 'Query', communities: Array<{ __typename?: 'Community', id: string, title: string, slug: string, contacts?: string | null, description?: string | null, communityHasBanned: boolean, createdAt: any, logo?: { __typename?: 'Media', url?: string | null } | null, banner?: { __typename?: 'Media', url?: string | null } | null, owner: { __typename?: 'User', id: string, name: string, slug: string, description?: string | null, avatar?: { __typename?: 'Media', url?: string | null } | null }, communityInfo?: Array<{ __typename?: 'ProfileTableInfoItem', id: string, key: string, value: string }> | null, posts?: Array<{ __typename?: 'Post', id: string, title: string, slug: string, author: { __typename?: 'User', id: string, name: string, slug: string, avatar?: { __typename?: 'Media', url?: string | null } | null } }> | null, roles?: Array<{ __typename?: 'Role', id: string, title: string }> | null }> };
-
-export type GetCommunityByIdQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type GetCommunityByIdQuery = { __typename?: 'Query', community?: { __typename?: 'Community', id: string, title: string, slug: string, contacts?: string | null, description?: string | null, communityHasBanned: boolean, createdAt: any, logo?: { __typename?: 'Media', url?: string | null } | null, banner?: { __typename?: 'Media', url?: string | null } | null, owner: { __typename?: 'User', id: string, name: string, slug: string, description?: string | null, avatar?: { __typename?: 'Media', url?: string | null } | null }, communityInfo?: Array<{ __typename?: 'ProfileTableInfoItem', id: string, key: string, value: string }> | null, posts?: Array<{ __typename?: 'Post', id: string, title: string, slug: string, author: { __typename?: 'User', id: string, name: string, slug: string, avatar?: { __typename?: 'Media', url?: string | null } | null } }> | null, roles?: Array<{ __typename?: 'Role', id: string, title: string }> | null } | null };
-
-export type GetHostQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetHostQuery = { __typename?: 'Query', host?: { __typename?: 'Host', title?: string | null, slogan?: string | null, contacts?: string | null, description?: string | null, firstSettings: boolean, owner?: { __typename?: 'User', id: string, name: string, slug: string, avatar?: { __typename?: 'Media', url?: string | null } | null } | null, logo?: { __typename?: 'Media', url?: string | null } | null, banner?: { __typename?: 'Media', url?: string | null } | null, authBanner?: { __typename?: 'Media', url?: string | null } | null } | null };
-
-export type GetHostSidebarNavigationQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetHostSidebarNavigationQuery = { __typename?: 'Query', hostSidebarNavigation?: { __typename?: 'HostSidebarNavigation', items?: Array<{ __typename?: 'HostSidebarNavigationItem', id: string, createdAt: any, post: { __typename?: 'Post', id: string, title: string } }> | null } | null };
-
-export type GetHostSocialNavigationQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetHostSocialNavigationQuery = { __typename?: 'Query', hostSocialNavigation?: { __typename?: 'HostSocialNavigation', github?: string | null, site?: string | null, telegram?: string | null, instagram?: string | null, twitter?: string | null, mastodon?: string | null } | null };
-
-export type GetHostUserBanByIdQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type GetHostUserBanByIdQuery = { __typename?: 'Query', hostUserBan?: { __typename?: 'HostUserBan', user: { __typename?: 'User', id: string, name: string, slug: string, avatar?: { __typename?: 'Media', id: string, url?: string | null } | null } } | null };
-
-export type GetHostUsersBanQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetHostUsersBanQuery = { __typename?: 'Query', hostUsersBan: Array<{ __typename?: 'HostUserBan', user: { __typename?: 'User', id: string, name: string, slug: string, avatar?: { __typename?: 'Media', id: string, url?: string | null } | null } }> };
-
-export type GetMeQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetMeQuery = { __typename?: 'Query', getMe: { __typename?: 'UserResponse', id: string, name: string, slug: string, email: string, description: string, isVerified: boolean, createdAt: string, updatedAt: string, avatar?: { __typename?: 'UserAvatarResponse', id: string, url: string } | null, userInfo: Array<{ __typename?: 'UserInfoResponse', id: string, key: string, value: string }>, hostRoles: Array<{ __typename?: 'UserHostRoleResponse', id: string, title: string, color: string, communityRolesManagement: boolean, hostUserBan: boolean, hostUserMute: boolean, hostCommunityDeletePost: boolean, hostCommunityDeleteComments: boolean, hostCommunityRemovePostFromPublication: boolean }>, communitiesRoles: Array<{ __typename?: 'UserCommunityRoleResponse', id: string, title: string, color: string, communityRolesManagement: boolean, communityUserBan: boolean, communityUserMute: boolean, communityDeletePost: boolean, communityDeleteComments: boolean, communityRemovePostFromPublication: boolean }> } };
-
-export type GetMediaByIdQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type GetMediaByIdQuery = { __typename?: 'Query', media?: { __typename?: 'Media', id: string, url?: string | null, createdAt: any } | null };
-
-export type GetPostByIdQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type GetPostByIdQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: string, title: string, slug: string, content: any, status: PostStatus, createdAt: any, updatedAt: any, publishedAt?: any | null, heroImage?: { __typename?: 'Media', url?: string | null } | null, author: { __typename?: 'User', id: string, name: string, slug: string, description?: string | null, avatar?: { __typename?: 'Media', url?: string | null } | null }, community: { __typename?: 'Community', id: string, title: string, slug: string }, viewerPermissions: { __typename?: 'CommunityPermissions', communityRolesManagement: boolean, communityUserBan: boolean, communityUserMute: boolean, communityDeletePost: boolean, communityDeleteComments: boolean, communityRemovePostFromPublication: boolean, communityUserHasBanned: boolean, communityUserHasMuted: boolean, communityOwner: boolean, hostOwner: boolean } } | null };
-
-export type GetPostsQueryVariables = Exact<{
-  status: PostStatus;
-}>;
-
-
-export type GetPostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: string, title: string, slug: string, content: any, status: PostStatus, createdAt: any, updatedAt: any, publishedAt?: any | null, heroImage?: { __typename?: 'Media', id: string, url?: string | null } | null, author: { __typename?: 'User', id: string, name: string, slug: string, description?: string | null }, community: { __typename?: 'Community', id: string, title: string, slug: string, description?: string | null }, viewerPermissions: { __typename?: 'CommunityPermissions', communityRolesManagement: boolean, communityUserBan: boolean, communityUserMute: boolean, communityDeletePost: boolean, communityDeleteComments: boolean, communityRemovePostFromPublication: boolean, communityUserHasBanned: boolean, communityUserHasMuted: boolean, communityOwner: boolean, hostOwner: boolean } }> };
-
-export type GetRoleByIdQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type GetRoleByIdQuery = { __typename?: 'Query', role?: { __typename?: 'Role', id: string, title: string, color?: string | null, communityRolesManagement: boolean, communityUserBan: boolean, communityUserMute: boolean, communityDeletePost: boolean, communityDeleteComments: boolean, communityRemovePostFromPublication: boolean, badge?: { __typename?: 'Media', url?: string | null } | null, community: { __typename?: 'Community', id: string, title: string, slug: string } } | null };
-
-export type GetRolesByCommunityIdQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type GetRolesByCommunityIdQuery = { __typename?: 'Query', roles: Array<{ __typename?: 'Role', id: string, title: string, color?: string | null, communityRolesManagement: boolean, communityUserBan: boolean, communityUserMute: boolean, communityDeletePost: boolean, communityRemovePostFromPublication: boolean, badge?: { __typename?: 'Media', url?: string | null } | null, community: { __typename?: 'Community', id: string, title: string, slug: string } }> };
-
-export type GetStartedLayoutQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetStartedLayoutQuery = { __typename?: 'Query', host?: { __typename?: 'Host', title?: string | null, slogan?: string | null, contacts?: string | null, description?: string | null, firstSettings: boolean, owner?: { __typename?: 'User', id: string, name: string, slug: string, avatar?: { __typename?: 'Media', url?: string | null } | null } | null, logo?: { __typename?: 'Media', url?: string | null } | null, banner?: { __typename?: 'Media', url?: string | null } | null, authBanner?: { __typename?: 'Media', url?: string | null } | null } | null, hostSidebarNavigation?: { __typename?: 'HostSidebarNavigation', items?: Array<{ __typename?: 'HostSidebarNavigationItem', id: string, createdAt: any, post: { __typename?: 'Post', id: string, title: string } }> | null } | null, hostSocialNavigation?: { __typename?: 'HostSocialNavigation', github?: string | null, site?: string | null, telegram?: string | null, instagram?: string | null, twitter?: string | null, mastodon?: string | null } | null };
-
-export type GetUserByIdQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type GetUserByIdQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, name: string, slug: string, email: string, description?: string | null, isVerified: boolean, createdAt: any, updatedAt: any, avatar?: { __typename?: 'Media', id: string, url?: string | null } | null, userInfo?: Array<{ __typename?: 'ProfileTableInfoItem', id: string, key: string, value: string }> | null, hostRoles?: Array<{ __typename?: 'HostRole', id: string, title: string, color?: string | null, communityRolesManagement: boolean, hostUserBan: boolean, hostUserMute: boolean, hostCommunityDeletePost: boolean, hostCommunityDeleteComments: boolean, hostCommunityRemovePostFromPublication: boolean }> | null, communitiesRoles?: Array<{ __typename?: 'Role', id: string, title: string, color?: string | null, communityRolesManagement: boolean, communityUserBan: boolean, communityUserMute: boolean, communityDeletePost: boolean, communityDeleteComments: boolean, communityRemovePostFromPublication: boolean }> | null } | null };
-
-export type GetUserPermissionsQueryVariables = Exact<{
-  userId: Scalars['ID']['input'];
-  communityId: Scalars['ID']['input'];
-}>;
-
-
-export type GetUserPermissionsQuery = { __typename?: 'Query', host?: { __typename?: 'Host', owner?: { __typename?: 'User', id: string } | null } | null, user?: { __typename?: 'User', id: string, name: string, communitiesRoles?: Array<{ __typename?: 'Role', communityRolesManagement: boolean, communityUserBan: boolean, communityUserMute: boolean, communityDeletePost: boolean, communityDeleteComments: boolean, communityRemovePostFromPublication: boolean, community: { __typename?: 'Community', id: string } }> | null } | null, community?: { __typename?: 'Community', owner: { __typename?: 'User', id: string } } | null, communityUserBan?: { __typename?: 'CommunityUserBan', id: string, community: { __typename?: 'Community', id: string }, user: { __typename?: 'User', id: string } } | null, communityUserMute?: { __typename?: 'CommunityUserMute', id: string, community: { __typename?: 'Community', id: string }, user: { __typename?: 'User', id: string } } | null };
-
-export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, name: string, slug: string, email: string, description?: string | null, isVerified: boolean, createdAt: any, updatedAt: any, avatar?: { __typename?: 'Media', id: string, url?: string | null } | null, userInfo?: Array<{ __typename?: 'ProfileTableInfoItem', id: string, key: string, value: string }> | null, hostRoles?: Array<{ __typename?: 'HostRole', id: string, title: string, color?: string | null, communityRolesManagement: boolean, hostUserBan: boolean, hostUserMute: boolean, hostCommunityDeletePost: boolean, hostCommunityDeleteComments: boolean, hostCommunityRemovePostFromPublication: boolean }> | null, communitiesRoles?: Array<{ __typename?: 'Role', id: string, title: string, color?: string | null, communityRolesManagement: boolean, communityUserBan: boolean, communityUserMute: boolean, communityDeletePost: boolean, communityDeleteComments: boolean, communityRemovePostFromPublication: boolean }> | null }> };
+/**
+ * __useUploadMediaMutation__
+ *
+ * To run a mutation, you first call `useUploadMediaMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUploadMediaMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [uploadMediaMutation, { data, loading, error }] = useUploadMediaMutation({
+ *   variables: {
+ *      file: // value for 'file'
+ *      dir: // value for 'dir'
+ *   },
+ * });
+ */
+export function useUploadMediaMutation(baseOptions?: Apollo.MutationHookOptions<UploadMediaMutation, UploadMediaMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UploadMediaMutation, UploadMediaMutationVariables>(UploadMediaDocument, options);
+      }
+export type UploadMediaMutationHookResult = ReturnType<typeof useUploadMediaMutation>;
+export type UploadMediaMutationResult = Apollo.MutationResult<UploadMediaMutation>;
+export type UploadMediaMutationOptions = Apollo.BaseMutationOptions<UploadMediaMutation, UploadMediaMutationVariables>;

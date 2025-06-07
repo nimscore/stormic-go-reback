@@ -93,6 +93,7 @@ export const MetaSidebar: React.FC<Props> = ({
 							<SidebarMenuSub className='bg-transparent p-0 m-0 border-none'>
 								<SidebarMenuSubItem className='bg-transparent p-0 m-0'>
 									<HeroImageUploader
+										setS3Path={`community/${selectedCommunityId}/posts/heroImages`}
 										heroImage={heroImage}
 										setHeroImage={setHeroImage}
 									/>

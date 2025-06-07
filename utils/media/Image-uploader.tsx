@@ -1,14 +1,9 @@
 'use client'
 
+import { createMedia, Media } from '@/utils/media/create-media'
 import { Plus } from 'lucide-react'
 import React, { useRef } from 'react'
 import { toast } from 'sonner'
-import { createMedia } from './createMedia'
-
-interface Media {
-	id?: number
-	url: string
-}
 
 interface ImageUploaderProps {
 	setCommentImage: (media: Media | undefined) => void
@@ -25,14 +20,19 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
 
 	const handleUpload = async (file: File) => {
 		setIsUploading(true)
-		const formData = new FormData()
-		formData.append('file', file)
 		try {
-			const result = await createMedia(formData, `${setS3Path}`)
-			setCommentImage({ url: result.url })
+			const result = await createMedia(file, setS3Path)
+			// result = { id, url, filename }
+			setCommentImage({
+				id: result.id,
+				url: result.url,
+				filename: result.filename,
+			})
 			toast.success('Изображение успешно загружено', { icon: '✅' })
 		} catch (error) {
+			console.error('Ошибка при загрузке через GraphQL:', error)
 			toast.error('Ошибка при загрузке изображения', { icon: '❌' })
+			setCommentImage(undefined)
 		} finally {
 			setIsUploading(false)
 		}

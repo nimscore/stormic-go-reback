@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import { createMedia } from '@/utils/media/createMedia'
+import { createMedia } from '@/utils/media/create-media'
 import Code from '@editorjs/code'
 // import Delimiter from '@editorjs/delimiter'
 import EditorJS, { OutputData } from '@editorjs/editorjs'

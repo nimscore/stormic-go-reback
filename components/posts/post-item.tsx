@@ -3,7 +3,6 @@
 import {
 	GetCommunityByIdQuery,
 	GetPostByIdQuery,
-	User,
 } from '@/graphql/schema/graphql'
 import { cn } from '@/lib/utils'
 import { useSession } from '@/providers/session'
@@ -22,7 +21,7 @@ export const PostItem: React.FC<{
 	className?: string
 }> = ({ post, communities, relatedPost = false, className }) => {
 	const session = useSession()
-	const currentUser = session && (session as User)
+	const currentUser = session && session
 	const commentsCount = usePostLikesStore(
 		state => state.commentsCount[post.id] || 0
 	)

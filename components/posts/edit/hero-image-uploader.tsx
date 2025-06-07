@@ -1,17 +1,19 @@
 'use client'
 
-import { createMedia } from '@/utils/media/createMedia'
+import { createMedia } from '@/utils/media/create-media'
 import { Plus, X } from 'lucide-react'
 import React, { useRef, useState } from 'react'
 import { toast } from 'sonner'
 
 interface HeroImageUploaderProps {
 	heroImage: string | undefined
+	setS3Path: string
 	setHeroImage: (media: string) => void
 }
 
 export const HeroImageUploader: React.FC<HeroImageUploaderProps> = ({
 	heroImage,
+	setS3Path,
 	setHeroImage,
 }) => {
 	const inputRef = useRef<HTMLInputElement>(null)
@@ -22,8 +24,8 @@ export const HeroImageUploader: React.FC<HeroImageUploaderProps> = ({
 		const formData = new FormData()
 		formData.append('file', file)
 		try {
-			const result = await createMedia(formData)
-			setHeroImage(result.id)
+			const result = await createMedia(file, setS3Path)
+			setHeroImage(result.url)
 		} catch (error) {
 			toast.error('Ошибка при загрузке изображения', { icon: '❌' })
 		} finally {

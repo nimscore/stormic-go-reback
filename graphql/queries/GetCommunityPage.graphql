@@ -1,0 +1,136 @@
+query GetCommunityPage(
+	$communityId: ID!
+	$onlyNotBanned: Boolean!
+	$status: PostStatus!
+) {
+	community(id: $communityId) {
+		id
+		title
+		slug
+		contacts
+		description
+		logo {
+			url
+		}
+		banner {
+			url
+		}
+		owner {
+			id
+			name
+			slug
+			description
+			avatar {
+				url
+			}
+		}
+		communityInfo {
+			id
+			key
+			value
+		}
+		posts {
+			id
+			title
+			slug
+			author {
+				id
+				name
+				slug
+				avatar {
+					url
+				}
+			}
+		}
+		roles {
+			id
+			title
+		}
+		communityHasBanned
+		createdAt
+	}
+	communities(onlyNotBanned: $onlyNotBanned) {
+		id
+		title
+		slug
+		contacts
+		description
+		logo {
+			url
+		}
+		banner {
+			url
+		}
+		owner {
+			id
+			name
+			slug
+			description
+			avatar {
+				url
+			}
+		}
+		communityInfo {
+			id
+			key
+			value
+		}
+		posts {
+			id
+			title
+			slug
+			author {
+				id
+				name
+				slug
+				avatar {
+					url
+				}
+			}
+		}
+		roles {
+			id
+			title
+		}
+		communityHasBanned
+		createdAt
+	}
+	posts(status: $status) {
+		id
+		title
+		slug
+		content
+		heroImage {
+			id
+			url
+		}
+		author {
+			id
+			name
+			slug
+			description
+		}
+		community {
+			id
+			title
+			slug
+			description
+		}
+		status
+		viewerPermissions {
+			communityRolesManagement
+			communityUserBan
+			communityUserMute
+			communityDeletePost
+			communityDeleteComments
+			communityRemovePostFromPublication
+			communityUserHasBanned
+			communityUserHasMuted
+			communityOwner
+			hostOwner
+		}
+		createdAt
+		updatedAt
+		publishedAt
+	}
+}
